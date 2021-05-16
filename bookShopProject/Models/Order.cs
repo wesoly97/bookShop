@@ -17,7 +17,7 @@ namespace bookShopProject.Models
         public int id { get; set; }
         public string status { get; set; }
         public Nullable<decimal> totalAmount { get; set; }
-        public string books_id { get; set; }
+        public Nullable<int> books_id { get; set; }
         public string books_quantity { get; set; }
         public int User_id { get; set; }
     }

@@ -25,10 +25,11 @@ namespace bookShopProject.Models
             throw new UnintentionalCodeFirstException();
         }
     
-        public virtual DbSet<books> books { get; set; }
         public virtual DbSet<cart> cart { get; set; }
         public virtual DbSet<User> User { get; set; }
         public virtual DbSet<userDetails> userDetails { get; set; }
         public virtual DbSet<Order> Order { get; set; }
+        public virtual DbSet<Category> Category { get; set; }
+        public virtual DbSet<books> books { get; set; }
     }
 }

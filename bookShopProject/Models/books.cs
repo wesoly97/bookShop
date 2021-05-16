@@ -11,7 +11,6 @@ namespace bookShopProject.Models
 {
     using System;
     using System.Collections.Generic;
-    using System.ComponentModel;
     using System.Web;
 
     public partial class books
@@ -28,14 +27,14 @@ namespace bookShopProject.Models
         public string publisher { get; set; }
         public int quantity { get; set; }
         public decimal Price { get; set; }
-        public string type { get; set; }
-
-        [DisplayName("Upload File")]
+        public int Category_id { get; set; }
         public string url { get; set; }
-    
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-
         public HttpPostedFileBase ImageFile { get; set; }
+
+
+
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<cart> cart { get; set; }
+        public virtual Category Category { get; set; }
     }
 }

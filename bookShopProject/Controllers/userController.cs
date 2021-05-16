@@ -104,6 +104,7 @@ namespace bookShopProject.Controllers
                 _db.SaveChanges();
                 _db.userDetails.Remove(deleteUserDetails);
                 _db.SaveChanges();
+
                 return RedirectToAction("Index");
             }
             catch

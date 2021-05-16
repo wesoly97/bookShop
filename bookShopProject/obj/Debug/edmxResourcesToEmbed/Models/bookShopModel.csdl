@@ -1,19 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Schema Namespace="bookShopModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
-  <EntityType Name="books">
-    <Key>
-      <PropertyRef Name="id" />
-    </Key>
-    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-    <Property Name="author" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
-    <Property Name="title" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
-    <Property Name="publisher" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
-    <Property Name="quantity" Type="Int32" Nullable="false" />
-    <Property Name="Price" Type="Decimal" Precision="19" Scale="4" Nullable="false" />
-    <Property Name="type" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
-    <NavigationProperty Name="cart" Relationship="Self.cart_books_FK" FromRole="books" ToRole="cart" />
-    <Property Name="url" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
-  </EntityType>
   <EntityType Name="cart">
     <Key>
       <PropertyRef Name="id" />
@@ -23,7 +9,7 @@
     <Property Name="price" Type="Decimal" Precision="19" Scale="4" Nullable="false" />
     <Property Name="User_id" Type="Int32" Nullable="false" />
     <Property Name="books_id" Type="Int32" Nullable="false" />
-    <NavigationProperty Name="books" Relationship="Self.cart_books_FK" FromRole="cart" ToRole="books" />
+    <NavigationProperty Name="books" Relationship="bookShopModel.cart_books_FK" FromRole="cart" ToRole="books" />
   </EntityType>
   <EntityType Name="User">
     <Key>
@@ -50,31 +36,6 @@
     <Property Name="phoneNumber" Type="Int32" Nullable="false" />
     <NavigationProperty Name="User" Relationship="Self.User_userDetails_FK" FromRole="userDetails" ToRole="User" />
   </EntityType>
-  <EntityType Name="Order">
-    <Key>
-      <PropertyRef Name="id" />
-      <PropertyRef Name="status" />
-      <PropertyRef Name="User_id" />
-    </Key>
-    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-    <Property Name="status" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
-    <Property Name="totalAmount" Type="Decimal" Precision="19" Scale="4" />
-    <Property Name="books_id" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
-    <Property Name="books_quantity" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
-    <Property Name="User_id" Type="Int32" Nullable="false" />
-  </EntityType>
-  <Association Name="cart_books_FK">
-    <End Role="books" Type="Self.books" Multiplicity="1" />
-    <End Role="cart" Type="Self.cart" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="books">
-        <PropertyRef Name="id" />
-      </Principal>
-      <Dependent Role="cart">
-        <PropertyRef Name="books_id" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
   <Association Name="User_userDetails_FK">
     <End Role="userDetails" Type="Self.userDetails" Multiplicity="1" />
     <End Role="User" Type="Self.User" Multiplicity="*" />
@@ -88,18 +49,81 @@
     </ReferentialConstraint>
   </Association>
   <EntityContainer Name="bookShopEntities" annotation:LazyLoadingEnabled="true">
-    <EntitySet Name="books" EntityType="Self.books" />
     <EntitySet Name="cart" EntityType="Self.cart" />
     <EntitySet Name="User" EntityType="Self.User" />
     <EntitySet Name="userDetails" EntityType="Self.userDetails" />
-    <EntitySet Name="Order" EntityType="Self.Order" />
-    <AssociationSet Name="cart_books_FK" Association="Self.cart_books_FK">
-      <End Role="books" EntitySet="books" />
-      <End Role="cart" EntitySet="cart" />
-    </AssociationSet>
     <AssociationSet Name="User_userDetails_FK" Association="Self.User_userDetails_FK">
       <End Role="userDetails" EntitySet="userDetails" />
       <End Role="User" EntitySet="User" />
     </AssociationSet>
+    <EntitySet Name="Order" EntityType="bookShopModel.Order" />
+    <EntitySet Name="Category" EntityType="bookShopModel.Category" />
+    <EntitySet Name="books" EntityType="bookShopModel.books" />
+    <AssociationSet Name="cart_books_FK" Association="bookShopModel.cart_books_FK">
+      <End Role="books" EntitySet="books" />
+      <End Role="cart" EntitySet="cart" />
+    </AssociationSet>
+    <AssociationSet Name="Category_id" Association="bookShopModel.Category_id">
+      <End Role="Category" EntitySet="Category" />
+      <End Role="books" EntitySet="books" />
+    </AssociationSet>
   </EntityContainer>
+  <EntityType Name="Order">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="status" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="false" />
+    <Property Name="totalAmount" Type="Decimal" Precision="19" Scale="4" />
+    <Property Name="books_id" Type="Int32" />
+    <Property Name="books_quantity" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+    <Property Name="User_id" Type="Int32" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Category">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Type" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="books" Relationship="bookShopModel.Category_id" FromRole="Category" ToRole="books" />
+  </EntityType>
+  <EntityType Name="books">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="author" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+    <Property Name="title" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="false" />
+    <Property Name="publisher" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+    <Property Name="quantity" Type="Int32" Nullable="false" />
+    <Property Name="Price" Type="Decimal" Nullable="false" Precision="19" Scale="4" />
+    <Property Name="Category_id" Type="Int32" Nullable="false" />
+    <Property Name="url" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="cart" Relationship="bookShopModel.cart_books_FK" FromRole="books" ToRole="cart" />
+    <NavigationProperty Name="Category" Relationship="bookShopModel.Category_id" FromRole="books" ToRole="Category" />
+  </EntityType>
+  <Association Name="cart_books_FK">
+    <End Type="bookShopModel.books" Role="books" Multiplicity="1" />
+    <End Type="bookShopModel.cart" Role="cart" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="books">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="cart">
+        <PropertyRef Name="books_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="Category_id">
+    <End Type="bookShopModel.Category" Role="Category" Multiplicity="1" />
+    <End Type="bookShopModel.books" Role="books" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Category">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="books">
+        <PropertyRef Name="Category_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
 </Schema>

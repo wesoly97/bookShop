@@ -5,13 +5,15 @@
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
       <Diagram DiagramId="c53c51c1d52c4b9da363acfa8bf6cbae" Name="Diagram1">
-        <EntityTypeShape EntityType="bookShopModel.books" Width="1.5" PointX="0.75" PointY="5" IsExpanded="true" />
-        <EntityTypeShape EntityType="bookShopModel.cart" Width="1.5" PointX="5.25" PointY="5" IsExpanded="true" />
+        <EntityTypeShape EntityType="bookShopModel.cart" Width="1.5" PointX="7" PointY="3.875" IsExpanded="true" />
         <EntityTypeShape EntityType="bookShopModel.User" Width="1.5" PointX="3" PointY="1.125" IsExpanded="true" />
         <EntityTypeShape EntityType="bookShopModel.userDetails" Width="1.5" PointX="0.75" PointY="1" IsExpanded="true" />
-        <EntityTypeShape EntityType="bookShopModel.Order" Width="1.5" PointX="6.5" PointY="1" IsExpanded="true" />
-        <AssociationConnector Association="bookShopModel.cart_books_FK" ManuallyRouted="false" />
         <AssociationConnector Association="bookShopModel.User_userDetails_FK" ManuallyRouted="false" />
+        <EntityTypeShape EntityType="bookShopModel.Order" Width="1.5" PointX="5.375" PointY="0.75" />
+        <EntityTypeShape EntityType="bookShopModel.Category" Width="1.5" PointX="4.75" PointY="6.125" />
+        <EntityTypeShape EntityType="bookShopModel.books" Width="1.5" PointX="0.625" PointY="4.875" />
+        <AssociationConnector Association="bookShopModel.cart_books_FK" />
+        <AssociationConnector Association="bookShopModel.Category_id" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

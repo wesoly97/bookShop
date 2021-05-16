@@ -159,8 +159,8 @@ D:\Pulpit\Uczelnia\Semestr 6\aplikacje II\crud\bookShopProject\bookShop\bookShop
 D:\Pulpit\Uczelnia\Semestr 6\aplikacje II\crud\bookShopProject\bookShop\bookShopProject\bin\Newtonsoft.Json.xml
 D:\Pulpit\Uczelnia\Semestr 6\aplikacje II\crud\bookShopProject\bookShop\bookShopProject\bin\Antlr3.Runtime.pdb
 D:\Pulpit\Uczelnia\Semestr 6\aplikacje II\crud\bookShopProject\bookShop\bookShopProject\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.xml
-D:\Pulpit\Uczelnia\Semestr 6\aplikacje II\crud\bookShopProject\bookShop\bookShopProject\obj\Debug\bookShopProject.csprojAssemblyReference.cache
 D:\Pulpit\Uczelnia\Semestr 6\aplikacje II\crud\bookShopProject\bookShop\bookShopProject\obj\Debug\bookShopProject.csproj.CoreCompileInputs.cache
 D:\Pulpit\Uczelnia\Semestr 6\aplikacje II\crud\bookShopProject\bookShop\bookShopProject\obj\Debug\bookShopProject.csproj.CopyComplete
 D:\Pulpit\Uczelnia\Semestr 6\aplikacje II\crud\bookShopProject\bookShop\bookShopProject\obj\Debug\bookShopProject.dll
 D:\Pulpit\Uczelnia\Semestr 6\aplikacje II\crud\bookShopProject\bookShop\bookShopProject\obj\Debug\bookShopProject.pdb
+D:\Pulpit\Uczelnia\Semestr 6\aplikacje II\crud\bookShopProject\bookShop\bookShopProject\obj\Debug\bookShopProject.csprojAssemblyReference.cache
