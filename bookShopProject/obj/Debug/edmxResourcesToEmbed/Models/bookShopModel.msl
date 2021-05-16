@@ -1,0 +1,65 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="bookShopModelStoreContainer" CdmEntityContainer="bookShopEntities">
+    <EntitySetMapping Name="books">
+      <EntityTypeMapping TypeName="bookShopModel.books">
+        <MappingFragment StoreEntitySet="books">
+          <ScalarProperty Name="id" ColumnName="id" />
+          <ScalarProperty Name="author" ColumnName="author" />
+          <ScalarProperty Name="title" ColumnName="title" />
+          <ScalarProperty Name="publisher" ColumnName="publisher" />
+          <ScalarProperty Name="quantity" ColumnName="quantity" />
+          <ScalarProperty Name="Price" ColumnName="Price" />
+          <ScalarProperty Name="type" ColumnName="type" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="cart">
+      <EntityTypeMapping TypeName="bookShopModel.cart">
+        <MappingFragment StoreEntitySet="cart">
+          <ScalarProperty Name="id" ColumnName="id" />
+          <ScalarProperty Name="quantity" ColumnName="quantity" />
+          <ScalarProperty Name="price" ColumnName="price" />
+          <ScalarProperty Name="User_id" ColumnName="User_id" />
+          <ScalarProperty Name="books_id" ColumnName="books_id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="User">
+      <EntityTypeMapping TypeName="bookShopModel.User">
+        <MappingFragment StoreEntitySet="User">
+          <ScalarProperty Name="id" ColumnName="id" />
+          <ScalarProperty Name="username" ColumnName="username" />
+          <ScalarProperty Name="password" ColumnName="password" />
+          <ScalarProperty Name="Role" ColumnName="Role" />
+          <ScalarProperty Name="userDetails_id" ColumnName="userDetails_id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="userDetails">
+      <EntityTypeMapping TypeName="bookShopModel.userDetails">
+        <MappingFragment StoreEntitySet="userDetails">
+          <ScalarProperty Name="id" ColumnName="id" />
+          <ScalarProperty Name="name" ColumnName="name" />
+          <ScalarProperty Name="surname" ColumnName="surname" />
+          <ScalarProperty Name="postCode" ColumnName="postCode" />
+          <ScalarProperty Name="street" ColumnName="street" />
+          <ScalarProperty Name="houseNumber" ColumnName="houseNumber" />
+          <ScalarProperty Name="phoneNumber" ColumnName="phoneNumber" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Order">
+      <EntityTypeMapping TypeName="bookShopModel.Order">
+        <MappingFragment StoreEntitySet="Order">
+          <ScalarProperty Name="id" ColumnName="id" />
+          <ScalarProperty Name="status" ColumnName="status" />
+          <ScalarProperty Name="totalAmount" ColumnName="totalAmount" />
+          <ScalarProperty Name="books_id" ColumnName="books_id" />
+          <ScalarProperty Name="books_quantity" ColumnName="books_quantity" />
+          <ScalarProperty Name="User_id" ColumnName="User_id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+  </EntityContainerMapping>
+</Mapping>
