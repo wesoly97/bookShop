@@ -12,6 +12,7 @@
     <Property Name="Price" Type="Decimal" Precision="19" Scale="4" Nullable="false" />
     <Property Name="type" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
     <NavigationProperty Name="cart" Relationship="Self.cart_books_FK" FromRole="books" ToRole="cart" />
+    <Property Name="url" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
   </EntityType>
   <EntityType Name="cart">
     <Key>

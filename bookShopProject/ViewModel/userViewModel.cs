@@ -1,14 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
 using bookShopProject.Models;
+
 namespace bookShopProject.ViewModel
 {
     public class userViewModel
     {
     
         public string username { get; set; }
+        [DataType(DataType.Password)]
         public string password { get; set; }
         public string Role { get; set; }
         public string name { get; set; }

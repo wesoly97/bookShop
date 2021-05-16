@@ -11,6 +11,7 @@
     <Property Name="quantity" Type="int" Nullable="false" />
     <Property Name="Price" Type="money" Nullable="false" />
     <Property Name="type" Type="varchar" MaxLength="255" Nullable="false" />
+    <Property Name="url" Type="varchar" MaxLength="255" />
   </EntityType>
   <EntityType Name="cart">
     <Key>
@@ -23,7 +24,7 @@
     <Property Name="books_id" Type="int" Nullable="false" />
   </EntityType>
   <!--Errors Found During Generation:
-warning 6002: The table/view 'D:\PULPIT\UCZELNIA\SEMESTR 6\APLIKACJE II\CRUD\BOOKSHOPPROJECT\BOOKSHOPPROJECT\APP_DATA\BOOKSHOP.MDF.dbo.Order' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'D:\PULPIT\UCZELNIA\SEMESTR 6\APLIKACJE II\CRUD\BOOKSHOPPROJECT\BOOKSHOP\BOOKSHOPPROJECT\APP_DATA\BOOKSHOP.MDF.dbo.Order' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
   <EntityType Name="Order">
     <Key>
       <PropertyRef Name="id" />

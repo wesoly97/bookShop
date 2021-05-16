@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
+using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -32,16 +34,18 @@ namespace bookShopProject.Controllers
         [HttpPost]
         public ActionResult Create(books newBook)
         {
-            try
-            {
+            string FileName = Path.GetFileNameWithoutExtension(newBook.ImageFile.FileName);
+            string extension = Path.GetExtension(newBook.ImageFile.FileName);
+            FileName = FileName + DateTime.Now.ToString("yymmssfff") + extension;
+            newBook.url = "~/bookImage/" + FileName;
+            FileName = Path.Combine(Server.MapPath("~/bookImage/"), FileName);
+            newBook.ImageFile.SaveAs(FileName);
+                
                 _db.books.Add(newBook);
                 _db.SaveChanges();
-                return RedirectToAction("Index");
-            }
-            catch
-            {
-                return View(newBook);
-            }
+                ModelState.Clear();
+                return View();
+            
         }
 
         // GET: book/Edit/5
@@ -60,7 +64,7 @@ namespace bookShopProject.Controllers
             {
 
                 if (TryUpdateModel(orginalBook, new string[] {
-                    "author", "title", "publisher","quantity","Price","type" }))
+                    "author", "title", "publisher","quantity","Price","type","url" }))
                 {
                     _db.SaveChanges();
                 }

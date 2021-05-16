@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="bookShopModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="bookShopModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="books">
           <Key>
             <PropertyRef Name="id" />
@@ -16,6 +16,7 @@
           <Property Name="quantity" Type="int" Nullable="false" />
           <Property Name="Price" Type="money" Nullable="false" />
           <Property Name="type" Type="varchar" MaxLength="255" Nullable="false" />
+          <Property Name="url" Type="varchar" MaxLength="255" />
         </EntityType>
         <EntityType Name="cart">
           <Key>
@@ -28,7 +29,7 @@
           <Property Name="books_id" Type="int" Nullable="false" />
         </EntityType>
         <!--Errors Found During Generation:
-warning 6002: The table/view 'D:\PULPIT\UCZELNIA\SEMESTR 6\APLIKACJE II\CRUD\BOOKSHOPPROJECT\BOOKSHOPPROJECT\APP_DATA\BOOKSHOP.MDF.dbo.Order' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'D:\PULPIT\UCZELNIA\SEMESTR 6\APLIKACJE II\CRUD\BOOKSHOPPROJECT\BOOKSHOP\BOOKSHOPPROJECT\APP_DATA\BOOKSHOP.MDF.dbo.Order' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="Order">
           <Key>
             <PropertyRef Name="id" />
@@ -116,8 +117,7 @@ warning 6035: The relationship 'Order_User_FK' has columns that are not part of 
             <End Role="User" EntitySet="User" />
           </AssociationSet>
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="bookShopModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -133,6 +133,7 @@ warning 6035: The relationship 'Order_User_FK' has columns that are not part of 
           <Property Name="Price" Type="Decimal" Precision="19" Scale="4" Nullable="false" />
           <Property Name="type" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
           <NavigationProperty Name="cart" Relationship="Self.cart_books_FK" FromRole="books" ToRole="cart" />
+          <Property Name="url" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="cart">
           <Key>
@@ -231,6 +232,7 @@ warning 6035: The relationship 'Order_User_FK' has columns that are not part of 
           <EntitySetMapping Name="books">
             <EntityTypeMapping TypeName="bookShopModel.books">
               <MappingFragment StoreEntitySet="books">
+                <ScalarProperty Name="url" ColumnName="url" />
                 <ScalarProperty Name="id" ColumnName="id" />
                 <ScalarProperty Name="author" ColumnName="author" />
                 <ScalarProperty Name="title" ColumnName="title" />
