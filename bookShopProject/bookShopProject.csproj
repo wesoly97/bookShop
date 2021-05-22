@@ -250,6 +250,8 @@
     <Content Include="Views\user\LogIn.cshtml" />
     <Content Include="Views\Book\showOrder.cshtml" />
     <Content Include="Views\Book\showOneOrder.cshtml" />
+    <Content Include="Views\Book\showBookByCategory.cshtml" />
+    <Content Include="Views\Book\searchForBook.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="bookImage\" />

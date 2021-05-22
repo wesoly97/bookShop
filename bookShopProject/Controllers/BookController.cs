@@ -23,6 +23,7 @@ namespace bookShopProject.Controllers
                 Response.Redirect("~/user/Login");
             }
             List<Category> categoryList = _db.Category.ToList();
+            ViewBag.CategoryList = categoryList;
             return View(_db.books.ToList());
         }
 
@@ -118,7 +119,10 @@ namespace bookShopProject.Controllers
             return RedirectToAction("Index");
 
         }
-
+        public ActionResult showBookByCategory(string type)
+        {
+            return View(_db.books.Where(c => c.Category.Type == type && (c.quantity>0)));
+        }
         public ActionResult cart()
         {
             System.Globalization.CultureInfo customCulture = (System.Globalization.CultureInfo)System.Threading.Thread.CurrentThread.CurrentCulture.Clone();
@@ -241,6 +245,13 @@ namespace bookShopProject.Controllers
         {       
             
             return View(_db.Order.Where(c => c.User_id == userId && c.order_number == orderNumber));
+        }
+
+        [HttpPost]
+        public ActionResult searchForBook(string keywords)
+        {
+            return View(_db.books.Where(c => c.title.Contains(keywords)|| c.author.Contains(keywords)));
+
         }
     }
 }

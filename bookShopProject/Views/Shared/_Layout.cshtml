@@ -18,6 +18,15 @@
                 </button>
                 @Html.ActionLink("BookShop", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
             </div>
+            <div class="navbar-left" style="margin-top:8px;">
+                @using (Html.BeginForm("searchForBook", "book", FormMethod.Post))
+                {
+                    <ul class="nav navbar-nav">
+                        <li><input type="text" placeholder="Search.." name="keywords"></li>
+                        <li><input type="submit" value="Search" /></li>
+                    </ul>
+                }
+            </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
                     <li>@Html.ActionLink("Ksiazki", "Index", "book")</li>
