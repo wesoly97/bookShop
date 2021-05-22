@@ -12,7 +12,10 @@ namespace bookShopProject.Controllers
         // GET: user
         public ActionResult Index()
         {
-
+            if (Session["userId"] == null)
+            {
+                Response.Redirect("~/user/Login");
+            }
             return View(_db.User.ToList());
         }
 
@@ -110,6 +113,34 @@ namespace bookShopProject.Controllers
             catch
             {
                 return RedirectToAction("Index");
+            }
+        }
+        public ActionResult LogIn()
+        {
+            return View();
+        }
+        public ActionResult LogOut()
+        {
+            Session.Abandon();
+            return RedirectToAction("Index","Home");
+        }
+        [HttpPost]
+        public ActionResult Authorize(User userModel)
+        {
+            using (_db)
+            {
+                var userInfo = _db.User.Where(x => x.username == userModel.username && x.password == userModel.password).FirstOrDefault();
+                if (userInfo == null)
+                {
+                    userModel.LoginErrorMessage = "wrong username or password";
+                    return View("LogIn", userModel);
+                }
+                else
+                {
+                    Session["userId"] = userInfo.id;
+                    return RedirectToAction("Index", "Home");
+                }
+              
             }
         }
     }

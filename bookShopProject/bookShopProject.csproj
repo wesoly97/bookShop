@@ -158,6 +158,7 @@
     <Compile Include="Models\Category.cs">
       <DependentUpon>bookShopModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\DisplayNameAttribute.cs" />
     <Compile Include="Models\Order.cs">
       <DependentUpon>bookShopModel.tt</DependentUpon>
     </Compile>
@@ -194,6 +195,7 @@
       <DependentUpon>bookShopModel.edmx</DependentUpon>
       <LastGenOutput>bookShopModel.cs</LastGenOutput>
     </Content>
+    <Content Include="Scripts\addToCart.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <EntityDeploy Include="Models\bookShopModel.edmx">
@@ -204,6 +206,7 @@
       <DependentUpon>bookShopModel.edmx</DependentUpon>
     </Content>
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
+    <Content Include="Scripts\cleanCart.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />
     <Content Include="Scripts\jquery-3.4.1.min.js" />
     <Content Include="Scripts\jquery-3.4.1.slim.js" />
@@ -214,6 +217,7 @@
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Scripts\modernizr-2.8.3.js" />
+    <Content Include="Scripts\removeFromCart.js" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -242,6 +246,10 @@
     <Content Include="Views\Book\Create.cshtml" />
     <Content Include="Views\Book\Edit.cshtml" />
     <Content Include="Views\Book\Delete.cshtml" />
+    <Content Include="Views\Book\cart.cshtml" />
+    <Content Include="Views\user\LogIn.cshtml" />
+    <Content Include="Views\Book\showOrder.cshtml" />
+    <Content Include="Views\Book\showOneOrder.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="bookImage\" />

@@ -67,6 +67,10 @@
       <End Role="Category" EntitySet="Category" />
       <End Role="books" EntitySet="books" />
     </AssociationSet>
+    <AssociationSet Name="order_books_FK" Association="bookShopModel.order_books_FK">
+      <End Role="books" EntitySet="books" />
+      <End Role="Order" EntitySet="Order" />
+    </AssociationSet>
   </EntityContainer>
   <EntityType Name="Order">
     <Key>
@@ -78,6 +82,8 @@
     <Property Name="books_id" Type="Int32" />
     <Property Name="books_quantity" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
     <Property Name="User_id" Type="Int32" Nullable="false" />
+    <Property Name="order_number" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="books" Relationship="bookShopModel.order_books_FK" FromRole="Order" ToRole="books" />
   </EntityType>
   <EntityType Name="Category">
     <Key>
@@ -101,6 +107,8 @@
     <Property Name="url" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
     <NavigationProperty Name="cart" Relationship="bookShopModel.cart_books_FK" FromRole="books" ToRole="cart" />
     <NavigationProperty Name="Category" Relationship="bookShopModel.Category_id" FromRole="books" ToRole="Category" />
+    <Property Name="description" Type="String" MaxLength="1000" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="Order" Relationship="bookShopModel.order_books_FK" FromRole="books" ToRole="Order" />
   </EntityType>
   <Association Name="cart_books_FK">
     <End Type="bookShopModel.books" Role="books" Multiplicity="1" />
@@ -123,6 +131,18 @@
       </Principal>
       <Dependent Role="books">
         <PropertyRef Name="Category_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="order_books_FK">
+    <End Type="bookShopModel.books" Role="books" Multiplicity="0..1" />
+    <End Type="bookShopModel.Order" Role="Order" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="books">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="Order">
+        <PropertyRef Name="books_id" />
       </Dependent>
     </ReferentialConstraint>
   </Association>

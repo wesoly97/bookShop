@@ -39,6 +39,7 @@
     <EntitySetMapping Name="Order">
       <EntityTypeMapping TypeName="bookShopModel.Order">
         <MappingFragment StoreEntitySet="Order">
+          <ScalarProperty Name="order_number" ColumnName="order_number" />
           <ScalarProperty Name="User_id" ColumnName="User_id" />
           <ScalarProperty Name="books_quantity" ColumnName="books_quantity" />
           <ScalarProperty Name="books_id" ColumnName="books_id" />
@@ -59,6 +60,7 @@
     <EntitySetMapping Name="books">
       <EntityTypeMapping TypeName="bookShopModel.books">
         <MappingFragment StoreEntitySet="books">
+          <ScalarProperty Name="description" ColumnName="description" />
           <ScalarProperty Name="url" ColumnName="url" />
           <ScalarProperty Name="Category_id" ColumnName="Category_id" />
           <ScalarProperty Name="Price" ColumnName="Price" />

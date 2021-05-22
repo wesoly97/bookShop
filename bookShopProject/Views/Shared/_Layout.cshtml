@@ -21,9 +21,20 @@
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
                     <li>@Html.ActionLink("Ksiazki", "Index", "book")</li>
+                    <li>@Html.ActionLink("Koszyk", "cart", "book")</li>
                     <li>@Html.ActionLink("Uzytkownicy", "index", "user")</li>
-                    <li>@Html.ActionLink("Rejestracja", "create", "user")</li>
-                    <li>@Html.ActionLink("Zamowienia", "create", "user")</li>
+                    <li>@Html.ActionLink("Zamowienia", "showOrder", "book")</li>
+                    @if (Session["userId"] != null)
+                    {
+                        <li>@Html.ActionLink("Log Out", "LogOut", "user")</li>
+                    }
+                    else
+                    {
+                        <li>@Html.ActionLink("Logowanie", "LogIn", "user")</li>
+                        <li>@Html.ActionLink("Rejestracja", "create", "user")</li>
+                    }
+
+
                 </ul>
             </div>
         </div>
@@ -39,5 +50,8 @@
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
     @RenderSection("scripts", required: false)
+<script src="~/Scripts/jquery-3.4.1.min.js"></script>
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
 </body>
 </html>

@@ -12,6 +12,7 @@
     <Property Name="Price" Type="money" Nullable="false" />
     <Property Name="Category_id" Type="int" Nullable="false" />
     <Property Name="url" Type="varchar" MaxLength="255" />
+    <Property Name="description" Type="varchar" MaxLength="1000" />
   </EntityType>
   <EntityType Name="cart">
     <Key>
@@ -40,6 +41,7 @@
     <Property Name="books_id" Type="int" />
     <Property Name="books_quantity" Type="varchar" MaxLength="255" />
     <Property Name="User_id" Type="int" Nullable="false" />
+    <Property Name="order_number" Type="varchar" MaxLength="50" Nullable="false" />
   </EntityType>
   <EntityType Name="User">
     <Key>
@@ -88,6 +90,18 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
+  <Association Name="order_books_FK">
+    <End Role="books" Type="Self.books" Multiplicity="0..1" />
+    <End Role="Order" Type="Self.Order" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="books">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="Order">
+        <PropertyRef Name="books_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
   <!--Errors Found During Generation:
 warning 6035: The relationship 'Order_User_FK' has columns that are not part of the key of the table on the primary side of the relationship. The relationship was excluded.
         <Association Name="Order_User_FK" />-->
@@ -117,6 +131,10 @@ warning 6035: The relationship 'Order_User_FK' has columns that are not part of 
     <AssociationSet Name="Category_id" Association="Self.Category_id">
       <End Role="Category" EntitySet="Category" />
       <End Role="books" EntitySet="books" />
+    </AssociationSet>
+    <AssociationSet Name="order_books_FK" Association="Self.order_books_FK">
+      <End Role="books" EntitySet="books" />
+      <End Role="Order" EntitySet="Order" />
     </AssociationSet>
     <AssociationSet Name="User_userDetails_FK" Association="Self.User_userDetails_FK">
       <End Role="userDetails" EntitySet="userDetails" />

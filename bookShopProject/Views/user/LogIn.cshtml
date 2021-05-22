@@ -1,0 +1,55 @@
+﻿@model bookShopProject.Models.User
+@{
+    ViewBag.Title = "LogIn";
+}
+
+
+<div>
+    @using (Html.BeginForm("Authorize","user",FormMethod.Post))
+    { 
+    <table>
+        <tr>
+            <td><h2>LogIn</h2></td>
+        </tr>
+        <tr>
+            <td>
+                @Html.LabelFor(model => model.username)
+            </td>
+            <td>
+                @Html.EditorFor(model => model.username)
+            </td>
+            <td>
+                @Html.ValidationMessageFor(model => model.username)
+            </td>
+        </tr>
+        <tr>
+            <td>
+                @Html.LabelFor(model => model.password)
+            </td>
+            <td>
+                @Html.EditorFor(model => model.password)
+            </td>
+            <td>
+                @Html.ValidationMessageFor(model => model.password)
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <label class="field-validation-error">@Html.DisplayFor(model => model.LoginErrorMessage)</label>
+            </td>
+           
+        </tr>
+        <tr>
+            <td>
+            </td>
+            <td>
+                <input type="submit" name="submitButton" value="Log In" />
+
+            </td>
+        </tr>
+    </table>
+    
+    }
+
+</div>
+

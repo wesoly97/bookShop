@@ -20,5 +20,8 @@ namespace bookShopProject.Models
         public Nullable<int> books_id { get; set; }
         public string books_quantity { get; set; }
         public int User_id { get; set; }
+        public string order_number { get; set; }
+    
+        public virtual books books { get; set; }
     }
 }

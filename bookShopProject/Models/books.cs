@@ -19,6 +19,7 @@ namespace bookShopProject.Models
         public books()
         {
             this.cart = new HashSet<cart>();
+            this.Order = new HashSet<Order>();
         }
     
         public int id { get; set; }
@@ -29,12 +30,14 @@ namespace bookShopProject.Models
         public decimal Price { get; set; }
         public int Category_id { get; set; }
         public string url { get; set; }
+        public string description { get; set; }
+
         public HttpPostedFileBase ImageFile { get; set; }
-
-
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<cart> cart { get; set; }
         public virtual Category Category { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Order> Order { get; set; }
     }
 }

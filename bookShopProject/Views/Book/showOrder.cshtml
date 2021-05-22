@@ -1,0 +1,135 @@
+﻿@model IEnumerable<bookShopProject.Models.Order>
+
+@{
+    ViewBag.Title = "showOrder";
+}
+
+<h2>showOrder</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.status)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.totalAmount)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.books_id)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.books_quantity)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.User_id)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.order_number)
+        </th>
+        <th></th>
+    </tr>
+    @{string orderNumberPrev = "";
+        decimal? toPay = 0;
+        decimal? oldPay = 0;
+        int count = 1;
+        string status = "";
+        int counter = 0;
+        string oldStatus = "";
+    }
+    @foreach (var item in Model)
+    {
+
+        counter += 1;
+        toPay = item.totalAmount;
+        status = item.status;
+        if (orderNumberPrev == item.order_number)
+        {
+
+            count = count + 1;
+            oldPay += toPay;
+            status = item.status;
+        }
+
+        else
+        {
+            if (counter != 1)
+            {
+                <tr>
+                    <td>
+                        @orderNumberPrev
+                    </td>
+                    <td>
+                        @oldPay
+                    </td>
+                    <td>
+                        @oldStatus
+                    </td>
+                    <td>
+                        @Html.ActionLink("Zobacz Zamówienie", "showOneOrder", "Book", new { userId = Session["userId"], orderNumber = orderNumberPrev }, new { @class = "btn btn-block" })
+
+                    </td>
+
+                </tr>
+
+
+                oldPay = 0;
+            }
+
+            {
+                orderNumberPrev = item.order_number;
+                oldPay = toPay;
+                toPay = 0;
+                count = 1;
+                oldStatus = status;
+
+            }
+        }
+        if (counter == ViewBag.Length)
+        {
+            if (orderNumberPrev == item.order_number)
+            {
+                <tr>
+                    <td>
+
+                        @orderNumberPrev
+                    </td>
+                    <td>
+                        @oldPay
+                    </td>
+                    <td>
+                        @oldStatus
+                    </td>
+                    <td>
+                        @Html.ActionLink("Zobacz Zamówienie", "showOneOrder", "Book", new { userId = Session["userId"], orderNumber = orderNumberPrev }, new { @class = "btn btn-block" })
+
+                    </td>
+
+                </tr>
+            }
+            else
+            {
+                <tr>
+                    <td>
+
+                        @item.order_number
+                    </td>
+                    <td>
+                        @item.totalAmount
+                    </td>
+                    <td>
+                        @item.status
+                    </td>
+                    <td>
+                        @Html.ActionLink("Zobacz Zamówienie", "showOneOrder", "Book", new { userId = Session["userId"], orderNumber = @item.order_number }, new { @class = "btn btn-block" })
+                    </td>
+
+                </tr>
+            }
+        }
+
+    }
+
+</table>

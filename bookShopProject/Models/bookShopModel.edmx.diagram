@@ -14,6 +14,7 @@
         <EntityTypeShape EntityType="bookShopModel.books" Width="1.5" PointX="0.625" PointY="4.875" />
         <AssociationConnector Association="bookShopModel.cart_books_FK" />
         <AssociationConnector Association="bookShopModel.Category_id" />
+        <AssociationConnector Association="bookShopModel.order_books_FK" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

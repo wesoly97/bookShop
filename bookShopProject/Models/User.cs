@@ -11,15 +11,21 @@ namespace bookShopProject.Models
 {
     using System;
     using System.Collections.Generic;
-    
+    using System.ComponentModel.DataAnnotations;
+
     public partial class User
     {
         public int id { get; set; }
+        [DisplayName("User Name")]
+        [Required(ErrorMessage = "This field is required")]
         public string username { get; set; }
+        [DataType(DataType.Password)]
+        [Required(ErrorMessage = "This field is required")]
         public string password { get; set; }
         public string Role { get; set; }
         public int userDetails_id { get; set; }
-    
+        public string LoginErrorMessage { get; set; }
+      
         public virtual userDetails userDetails { get; set; }
     }
 }

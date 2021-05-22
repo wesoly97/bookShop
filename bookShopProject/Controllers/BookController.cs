@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Web;
 using System.Web.Mvc;
 using bookShopProject.Models;
@@ -13,10 +14,15 @@ namespace bookShopProject.Controllers
     public class BookController : Controller
     {
         private bookShopEntities _db = new bookShopEntities();
+        private cart cartObject = new cart();
         // GET: book
         public ActionResult Index()
         {
-
+            if (Session["userId"] == null)
+            {
+                Response.Redirect("~/user/Login");
+            }
+            List<Category> categoryList = _db.Category.ToList();
             return View(_db.books.ToList());
         }
 
@@ -101,8 +107,8 @@ namespace bookShopProject.Controllers
         {
                 var selBook = _db.books.Find(bookToDelete.id);
                 string path = selBook.url;
-            System.IO.File.Delete(Server.MapPath(path));
-            _db.Order.RemoveRange(_db.Order.Where(c => c.books_id == bookToDelete.id));
+                System.IO.File.Delete(Server.MapPath(path));
+                _db.Order.RemoveRange(_db.Order.Where(c => c.books_id == bookToDelete.id));
                 _db.SaveChanges();
                 _db.cart.RemoveRange(_db.cart.Where(c => c.books_id == bookToDelete.id));
                 _db.SaveChanges();
@@ -111,6 +117,130 @@ namespace bookShopProject.Controllers
                 
             return RedirectToAction("Index");
 
+        }
+
+        public ActionResult cart()
+        {
+            System.Globalization.CultureInfo customCulture = (System.Globalization.CultureInfo)System.Threading.Thread.CurrentThread.CurrentCulture.Clone();
+            customCulture.NumberFormat.NumberDecimalSeparator = ".";
+
+            System.Threading.Thread.CurrentThread.CurrentCulture = customCulture;
+            return View(_db.cart.ToList());
+        }
+
+        public JsonResult addToCart(int itemId, int userId)
+        {
+            System.Globalization.CultureInfo customCulture = (System.Globalization.CultureInfo)System.Threading.Thread.CurrentThread.CurrentCulture.Clone();
+            customCulture.NumberFormat.NumberDecimalSeparator = ".";
+
+            System.Threading.Thread.CurrentThread.CurrentCulture = customCulture;
+           
+            int itemIdNumber = Convert.ToInt32(itemId);
+            books bookObject = _db.books.Single(model=> model.id== itemIdNumber);
+            var cartElement = _db.cart.Where(x => x.User_id == userId && x.books_id == itemId).FirstOrDefault();
+
+            if (cartElement != null)
+            {
+                if (cartElement.quantity + 1 <= bookObject.quantity)
+                {
+                    cartElement.quantity = cartElement.quantity + 1;
+                    cartElement.price = cartElement.price + bookObject.Price;
+                }
+                
+                
+            }
+            else
+            {
+                cartObject.books_id = bookObject.id;
+                cartObject.quantity = 1;
+                cartObject.price = bookObject.Price;
+                cartObject.User_id = Convert.ToInt32(userId);
+                _db.cart.Add(cartObject);
+            }
+            _db.SaveChanges();
+            cartElement = _db.cart.Where(x => x.User_id == userId && x.books_id == itemId).FirstOrDefault();
+
+            return Json(new { success=true, quantity= cartElement.quantity, price = cartElement.price, priceBook = cartElement.books.Price,quantityBook= bookObject.quantity },JsonRequestBehavior.AllowGet);
+        }
+        public JsonResult removeFromCart(int itemId, int userId)
+        {
+            System.Globalization.CultureInfo customCulture = (System.Globalization.CultureInfo)System.Threading.Thread.CurrentThread.CurrentCulture.Clone();
+            customCulture.NumberFormat.NumberDecimalSeparator = ".";
+
+            System.Threading.Thread.CurrentThread.CurrentCulture = customCulture;
+            
+            int itemIdNumber = Convert.ToInt32(itemId);
+            books bookObject = _db.books.Single(model => model.id == itemIdNumber);
+            var cartElement = _db.cart.Where(x => x.User_id == userId && x.books_id == itemId).FirstOrDefault();
+            int quantityTmp = 0;
+            decimal priceTmp = 0;
+            decimal bookPriceTmp=0;
+            if (cartElement != null)
+            {
+                 quantityTmp = cartElement.quantity;
+                 priceTmp = cartElement.price;
+                 bookPriceTmp = cartElement.books.Price;
+                if (cartElement.quantity > 0)
+                {
+                    cartElement.quantity = cartElement.quantity - 1;
+                    cartElement.price = cartElement.price - bookObject.Price;
+                    quantityTmp = cartElement.quantity;
+                    priceTmp = cartElement.price;
+                }
+                if (cartElement.quantity == 0)
+                {
+                    _db.cart.RemoveRange(_db.cart.Where(c => c.id == cartElement.id));
+                }
+                _db.SaveChanges();
+            }
+            return Json(new { success = true, quantity = quantityTmp, price = priceTmp, priceBook = bookPriceTmp }, JsonRequestBehavior.AllowGet);
+        }
+        public JsonResult cleanCart()
+        {
+            _db.cart.RemoveRange(_db.cart.ToList());
+            _db.SaveChanges();
+            return Json(new { success = true}, JsonRequestBehavior.AllowGet);
+        }
+        public ActionResult showOrder()
+        {
+            ViewBag.length = _db.Order.ToList().Count;
+
+            return View(_db.Order.ToList());
+        }
+        public ActionResult addOrder(int userid)
+        {
+            Order newOrder=new Order();
+            var rand = new Random();
+            var cartElement = _db.cart.Where(x => x.User_id == userid).ToList();
+            int numberRand = rand.Next(1000);
+            DateTime todaysDate = DateTime.Now;
+            string stringDate = Convert.ToString(todaysDate);
+            stringDate = Regex.Replace(stringDate, @"\s+", "");
+
+            foreach (cart element in cartElement)
+            {
+                
+                newOrder.books_id = element.books_id;
+                newOrder.books_quantity = Convert.ToString(element.quantity);
+                newOrder.User_id = userid;
+                newOrder.status = "W trakcie realizacji";
+                newOrder.totalAmount = Math.Round(element.books.Price * element.quantity,2);
+                newOrder.order_number = stringDate + Convert.ToString(numberRand);
+                var book = _db.books.Where(x => x.id ==element.books_id ).FirstOrDefault(); ;
+                book.quantity = book.quantity - element.quantity;
+                _db.Order.Add(newOrder);
+                _db.SaveChanges();
+            }
+            
+            _db.cart.RemoveRange(_db.cart.ToList());
+            
+            _db.SaveChanges();
+            return RedirectToAction("showOrder");
+        }
+        public ActionResult showOneOrder(int userId, string orderNumber)
+        {       
+            
+            return View(_db.Order.Where(c => c.User_id == userId && c.order_number == orderNumber));
         }
     }
 }

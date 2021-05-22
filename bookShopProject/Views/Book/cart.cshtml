@@ -1,0 +1,117 @@
+﻿@model IEnumerable<bookShopProject.Models.cart>
+
+@{
+    ViewBag.Title = "cart";
+    int counter = 0;
+    decimal sum = 0;
+}
+
+<h2>cart</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<div class="items">
+    <table class="table">
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.books.title)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.quantity)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.books.Price)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.price)
+            </th>
+            <th>
+
+            </th>
+        </tr>
+
+        @foreach (var item in Model)
+        {
+            <tr>
+
+
+
+                <td>
+                    <div class="@("item"+item.books_id)">
+                        <img src="@Url.Content(item.books.url)" alt=@Url.Content(item.books.title) />
+                        @Html.DisplayFor(modelItem => item.books.title)
+                        @Html.DisplayFor(modelItem => item.books.author)
+                    </div>
+                </td>
+                <td>
+                    <div class="@("item"+item.books_id)">
+                        <button onclick="RemoveFromCart(this,@item.books_id,@Session["userId"])">-</button>
+                        <div id="@("quantity"+item.books_id)">
+                            @Html.DisplayFor(modelItem => item.quantity)
+                        </div>
+                        <button onclick="AddToCart(this,@item.books_id,@Session["userId"])">+</button>
+
+                    </div>
+                </td>
+                <td>
+                    <div class="@("item"+item.books_id)">
+                        @Html.DisplayFor(modelItem => item.books.Price) PLN
+                    </div>
+                </td>
+                <td>
+                    <div class="@("item"+item.books_id)">
+                        <div id="@("price"+item.books_id)">
+                            @Html.DisplayFor(modelItem => item.price) PLN
+                        </div>
+                    </div>
+                </td>
+
+                <td>
+                    <div class="@("item"+item.books_id)">
+                        @Html.ActionLink("Edit", "Edit", new { id = item.id }) |
+                        @Html.ActionLink("Details", "Details", new { id = item.id }) |
+                        @Html.ActionLink("Delete", "Delete", new { id = item.id })
+                    </div>
+                </td>
+            </tr>
+
+            counter = counter + item.quantity;
+            sum = sum + item.price;
+
+        }
+        <tr>
+            <td>
+                Razem
+            </td>
+            <td>
+                <div id="count">
+                    @counter
+                </div> egz.
+                <script type="text/javascript">
+                let count = @counter;
+                </script>
+            </td>
+            <td>
+            </td>
+            <td>
+                <div id="sum">
+                    @Math.Round(sum, 2)
+                </div>
+                <script type="text/javascript">
+                let sum = (@Math.Round(sum, 2))
+                </script>
+            </td>
+            <td>
+                <button onclick="CleanCart()">Wyczyść koszyk</button>
+            </td>
+            <td>
+                @Html.ActionLink("Submit", "addOrder", "Book", new { userId=Session["userId"] }, new { @class = "btn btn-block" })
+
+            </td>
+        </tr>
+    </table>
+</div>
+<script src="~/Scripts/addToCart.js"></script>
+<script src="~/Scripts/removeFromCart.js"></script>
+<script src="~/Scripts/cleanCart.js"></script>

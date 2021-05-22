@@ -1,0 +1,63 @@
+﻿@model IEnumerable<bookShopProject.Models.Order>
+
+@{
+    ViewBag.Title = "showOneOrder";
+}
+
+<h2>showOneOrder</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.books.title)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.totalAmount)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.books_id)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.books_quantity)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.User_id)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.order_number)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.books.title)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.totalAmount)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.books_id)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.books_quantity)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.User_id)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.order_number)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.id }) |
+            @Html.ActionLink("Details", "Details", new { id=item.id }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.id })
+        </td>
+    </tr>
+}
+
+</table>
