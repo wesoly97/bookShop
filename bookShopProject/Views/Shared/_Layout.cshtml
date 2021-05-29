@@ -6,6 +6,9 @@
     <title>@ViewBag.Title - My ASP.NET Application</title>
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
+    <script src="~/Scripts/jquery-3.4.1.min.js"></script>
+    <script src="~/Scripts/jquery.validate.min.js"></script>
+    <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
 </head>
 <body>
     <div class="navbar navbar-inverse navbar-fixed-top">
@@ -18,7 +21,7 @@
                 </button>
                 @Html.ActionLink("BookShop", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
             </div>
-            <div class="navbar-left" style="margin-top:8px;">
+            <div class="navbar-left" style="margin-top:12px;">
                 @using (Html.BeginForm("searchForBook", "book", FormMethod.Post))
                 {
                     <ul class="nav navbar-nav">

@@ -24,6 +24,13 @@ namespace bookShopProject.Controllers
             }
             List<Category> categoryList = _db.Category.ToList();
             ViewBag.CategoryList = categoryList;
+            List<SelectListItem> items = new List<SelectListItem>();
+            items.Add(new SelectListItem {  Text = "A-Z", Value = "AZ"});
+            items.Add(new SelectListItem { Text = "Z-A", Value = "ZA" });
+            items.Add(new SelectListItem { Text = "Cena rosnąco", Value = "cr" });
+            items.Add(new SelectListItem { Text = "Cena Malejąco", Value = "cm" });
+
+            ViewData["items"] = items;
             return View(_db.books.ToList());
         }
 
@@ -252,6 +259,48 @@ namespace bookShopProject.Controllers
         {
             return View(_db.books.Where(c => c.title.Contains(keywords)|| c.author.Contains(keywords)));
 
+        }
+        public ActionResult changeSortingOption(string SortingValue)
+        {
+            List<books> book;
+            List<SelectListItem> items = new List<SelectListItem>();
+            if (SortingValue=="AZ")
+            {
+                items.Add(new SelectListItem { Text = "A-Z", Value = "AZ" });
+                items.Add(new SelectListItem { Text = "Z-A", Value = "ZA" });
+                items.Add(new SelectListItem { Text = "Cena rosnąco", Value = "cr" });
+                items.Add(new SelectListItem { Text = "Cena Malejąco", Value = "cm" });
+                book = _db.books.OrderBy(x => x.title).ToList();
+            }
+            else if (SortingValue=="ZA")
+            {
+                items.Add(new SelectListItem { Text = "Z-A", Value = "ZA" });
+                items.Add(new SelectListItem { Text = "A-Z", Value = "AZ" });
+                items.Add(new SelectListItem { Text = "Cena rosnąco", Value = "cr" });
+                items.Add(new SelectListItem { Text = "Cena Malejąco", Value = "cm" });
+                book = _db.books.OrderByDescending(x => x.title).ToList();
+            }
+            else if (SortingValue=="cm")
+            {
+                items.Add(new SelectListItem { Text = "Cena Malejąco", Value = "cm" });
+                items.Add(new SelectListItem { Text = "A-Z", Value = "AZ" });
+                items.Add(new SelectListItem { Text = "Cena rosnąco", Value = "cr" });
+                items.Add(new SelectListItem { Text = "Z-A", Value = "ZA" });
+                book = _db.books.OrderByDescending(x => x.Price).ToList();
+            }
+            else
+            {
+                items.Add(new SelectListItem { Text = "Cena rosnąco", Value = "cr" });
+                items.Add(new SelectListItem { Text = "A-Z", Value = "AZ" });
+                items.Add(new SelectListItem { Text = "Z-A", Value = "ZA" });
+                items.Add(new SelectListItem { Text = "Cena Malejąco", Value = "cm" });
+                book = _db.books.OrderBy(x => x.Price).ToList();
+            }
+         
+            List<Category> categoryList = _db.Category.ToList();
+            ViewBag.CategoryList = categoryList;
+            ViewData["items"] = items;
+            return PartialView("Index", book);
         }
     }
 }
