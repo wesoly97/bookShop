@@ -1,103 +1,102 @@
 ﻿@model IEnumerable<bookShopProject.Models.books>
 @{
     ViewBag.Title = "Index";
-}
-<div class="Content">
-    <h2>Index</h2>
-
-    <p>
-        @Html.ActionLink("Create New", "Create")
-    </p>
-    <ul>
-        @foreach (var item in ViewBag.CategoryList)
-        {
-            <li>@Html.ActionLink((string)item.Type, "showBookByCategory", new { type = item.Type })</li>
-        }
-    </ul>
-    @Html.DropDownList("items", ViewData["items"] as List<SelectListItem>, new { @class = "form-select" })
-
-<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.author)
-        </th>
-        <th>
-
-            @Html.DisplayNameFor(model => model.title)
-
-        </th>
-        <th>
-
-            @Html.DisplayNameFor(model => model.description)
-
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.publisher)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.quantity)
-
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Price)
-
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Category.Type)
-
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.url)
-
-        </th>
-        <th></th>
-    </tr>
-
-    @foreach (var item in Model)
+    int numberOfBooks = 0;
+    foreach (var item in Model)
     {
         if (item.quantity > 0)
         {
-
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.author)
-        </td>
-
-        <td>
-            @Html.DisplayFor(modelItem => item.title)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.description)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.publisher)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.quantity)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Price)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Category.Type)
-        </td>
-        <td>
-            <a href='@Url.Action("Details", "book", new { id = item.id })'>
-                <img src="@Url.Content(item.url)" alt=@Url.Content(item.title) />
-            </a> 
-         </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id = item.id }) |
-            @Html.ActionLink("Details", "Details", new { id = item.id }) |
-            @Html.ActionLink("Delete", "Delete", new { id = item.id })
-            <input type="button" name="buttonAddToCart" value="Add to Cart" class="btn btn-primary" onclick="AddToCart(this,@item.id,@Session["userId"])" />
-        </td>
-    </tr>
-
+            numberOfBooks += 1;
         }
     }
+}
 
-</table>
-</div>
-    <script src="~/Scripts/addToCart.js"></script>
-    <script src="~/Scripts/sortBooks.js"></script>
+@if (Convert.ToString(Session["role"]) == "sprzedawca")
+{
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+}
+
+<div class="Content">
+    <link href="~/Content/productList.css" rel="stylesheet" />
+    <br />
+    <div class="rounded d-flex align-items-center justify-content-between " id="header">
+       
+            <div class="row">
+                <div class="col-md-2 text-center">
+                    <button class="btn btn-hide text-uppercase " type="button" data-toggle="collapse" data-target="#filterbar" aria-expanded="false" aria-controls="filterbar" id="filter-btn" onclick="changeBtnTxt()"> <span id="btn-txt">Pokaz/ukryj filtry</span> </button>
+                </div>
+
+                <div class="xd">
+                    <div class="collapse navbar-collapse d-lg-flex col-md-1" id="mynav">
+                        @Html.DropDownList("items", ViewData["items"] as List<SelectListItem>, new { @class = "form-select " })
+                    </div>
+                    <div class="col-md-5">
+                        <div>Wyniki dla: @ViewBag.gatunek</div>
+                       
+                    </div>
+                    <div class="col-md-4 ">
+                        <div>Liczba wyświetlonych ksiązek: @numberOfBooks</div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="row">
+
+            <div id="filterbar" class="col-md-4">
+                <div class="box border-bottom ">
+                    <div id="inner-box">
+                        <div class="box-label text-uppercase d-flex align-items-center">Dostępne Gatunki: </div>
+                        @foreach (var item in ViewBag.CategoryList)
+                        {
+                            <div>@Html.ActionLink((string)item.Type, "showBookByCategory", new { type = item.Type }, new { @class = "tick" })</div>
+                        }
+
+                    </div>
+                </div>
+
+            </div>
+            <div id="content" class="col-md-8">
+                <div id="products">
+                    <div class="row">
+                        @foreach (var item in Model)
+                        {
+                            if (item.quantity > 0)
+                            {
+                                <div class="col-lg-3 col-md-3">
+                                    <a href='@Url.Action("Details", "book", new { id = item.id })'>
+                                        <div class="card d-flex flex-column align-items-center">
+                                            <div class="product-name"> @Html.DisplayFor(modelItem => item.Category.Type)</div>
+                                            <div class="card-img"> <img src="@Url.Content(item.url)" alt=@Url.Content(item.title)> </div>
+                                            <div class="card-body pt-5">
+                                                <div class="text-muted text-center mt-auto">Available Colors</div>
+                                                <div class="d-flex align-items-center justify-content-center colors my-2">
+                                                    @Html.DisplayFor(modelItem => item.author)
+                                                </div>
+                                                <div class="d-flex align-items-center price">
+                                                    <div class="mr-2"><span class="text-dark"> <b>@Html.DisplayFor(modelItem => item.title)</b></span></div>
+                                                    <div class="font-weight-bold"> @Html.DisplayFor(modelItem => item.Price) ZL</div>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                        <br />
+                                    </a>
+                                    <button onclick="AddToCart(this,@item.id,@Session["userId"])" class="btn">DODAJ DO KOSZYKA</button>
+
+                                </div>
+                            }
+                        }
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<script src="~/Scripts/productList.js"></script>
+<script src="~/Scripts/addToCart.js"></script>
+<script src="~/Scripts/sortBooks.js"></script>

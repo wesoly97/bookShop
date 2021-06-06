@@ -25,7 +25,6 @@ namespace bookShopProject.Models
         public string Role { get; set; }
         public int userDetails_id { get; set; }
         public string LoginErrorMessage { get; set; }
-      
         public virtual userDetails userDetails { get; set; }
     }
 }

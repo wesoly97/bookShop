@@ -9,7 +9,6 @@ $(document).ready(function () {
             data: { SortingValue: SortingValue },
             success: function (result)
             {
-                alert(SortingValue);
                 $(".Content").html(result);
             }
         });

@@ -3,53 +3,28 @@
     ViewBag.Title = "LogIn";
 }
 
+<link href="~/Content/login.css" rel="stylesheet" />
+@using (Html.BeginForm("Authorize", "user", FormMethod.Post))
+{
+    <div class="limit">
+        <div class="login-container">
+            <div class="bb-login">
+                <form class="bb-form validate-form">
+                    <span class="bb-form-title p-b-26"> Zaloguj sie! </span>
+                    <div class="validate-input"><label class="field-validation-error"><br />@Html.DisplayFor(model => model.LoginErrorMessage)</label></div>
 
-<div>
-    @using (Html.BeginForm("Authorize","user",FormMethod.Post))
-    { 
-    <table>
-        <tr>
-            <td><h2>LogIn</h2></td>
-        </tr>
-        <tr>
-            <td>
-                @Html.LabelFor(model => model.username)
-            </td>
-            <td>
-                @Html.EditorFor(model => model.username)
-            </td>
-            <td>
-                @Html.ValidationMessageFor(model => model.username)
-            </td>
-        </tr>
-        <tr>
-            <td>
-                @Html.LabelFor(model => model.password)
-            </td>
-            <td>
-                @Html.EditorFor(model => model.password)
-            </td>
-            <td>
-                @Html.ValidationMessageFor(model => model.password)
-            </td>
-        </tr>
-        <tr>
-            <td colspan="2">
-                <label class="field-validation-error">@Html.DisplayFor(model => model.LoginErrorMessage)</label>
-            </td>
-           
-        </tr>
-        <tr>
-            <td>
-            </td>
-            <td>
-                <input type="submit" name="submitButton" value="Log In" />
-
-            </td>
-        </tr>
-    </table>
-    
-    }
-
-</div>
-
+                    <div class="wrap-input100 validate-input">  @Html.TextBoxFor(model => model.username, new { placeholder = "LOGIN", @class = "input100" })  </div>
+                    <div class="wrap-input100 validate-input"> @Html.PasswordFor(model => model.password, new { placeholder = "HASLO", @class = "input100" })  </div>
+                    
+                    <div class="login-container-form-btn">
+                        <div class="bb-login-form-btn">
+                            <div class="bb-form-bgbtn"></div> <button class="bb-form-btn"> Login </button>
+                        </div>
+                    </div>
+                    <div class="text-center p-t-115"> <span class="txt1"> Nie posiadasz konta?</span> @Html.ActionLink("ZAREJESTRUJ SIĘ", "Create", "User", new { @class = "txt2" })</div>
+                   
+                </form>
+            </div>
+        </div>
+    </div>
+}

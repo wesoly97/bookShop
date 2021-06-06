@@ -29,7 +29,7 @@ namespace bookShopProject.Controllers
             items.Add(new SelectListItem { Text = "Z-A", Value = "ZA" });
             items.Add(new SelectListItem { Text = "Cena rosnąco", Value = "cr" });
             items.Add(new SelectListItem { Text = "Cena Malejąco", Value = "cm" });
-
+            ViewBag.gatunek = "Wszystkie gatunki";
             ViewData["items"] = items;
             return View(_db.books.ToList());
         }
@@ -37,6 +37,10 @@ namespace bookShopProject.Controllers
         // GET: book/Details/5
         public ActionResult Details(int id)
         {
+            if (Session["userId"] == null)
+            {
+                Response.Redirect("~/user/Login");
+            }
             var bookToDetails = _db.books.Find(id);
             return View(bookToDetails);
         }
@@ -44,6 +48,10 @@ namespace bookShopProject.Controllers
         // GET: book/Create
         public ActionResult Create()
         {
+            if (Session["userId"] == null)
+            {
+                Response.Redirect("~/user/Login");
+            }
             List<Category> categoryList = _db.Category.ToList();
             ViewBag.CategoryList = new SelectList(categoryList, "Id", "Type");
             
@@ -73,6 +81,10 @@ namespace bookShopProject.Controllers
         // GET: book/Edit/5
         public ActionResult Edit(int id)
         {
+            if (Session["userId"] == null)
+            {
+                Response.Redirect("~/user/Login");
+            }
             List<Category> categoryList = _db.Category.ToList();
             ViewBag.CategoryList = new SelectList(categoryList, "Id", "Type");
             var booksToEdit = _db.books.Find(id);
@@ -105,6 +117,10 @@ namespace bookShopProject.Controllers
         // GET: book/Delete/5
         public ActionResult Delete(int id)
         {
+            if (Session["userId"] == null)
+            {
+                Response.Redirect("~/user/Login");
+            }
             var booksToDelete = _db.books.Find(id);
             return View(booksToDelete);
         }
@@ -128,19 +144,39 @@ namespace bookShopProject.Controllers
         }
         public ActionResult showBookByCategory(string type)
         {
-            return View(_db.books.Where(c => c.Category.Type == type && (c.quantity>0)));
+            if (Session["userId"] == null)
+            {
+                Response.Redirect("~/user/Login");
+            }
+            List<Category> categoryList = _db.Category.ToList();
+            ViewBag.CategoryList = categoryList;
+            List<SelectListItem> items = new List<SelectListItem>();
+            items.Add(new SelectListItem { Text = "A-Z", Value = "AZ" });
+            items.Add(new SelectListItem { Text = "Z-A", Value = "ZA" });
+            items.Add(new SelectListItem { Text = "Cena rosnąco", Value = "cr" });
+            items.Add(new SelectListItem { Text = "Cena Malejąco", Value = "cm" });
+            ViewBag.gatunek = type;
+            ViewData["items"] = items;
+            var book=_db.books.Where(c => c.Category.Type == type && (c.quantity > 0));
+            return View("Index", book);
         }
         public ActionResult cart()
         {
+            if (Session["userId"] == null)
+            {
+                Response.Redirect("~/user/Login");
+            }
+            int userid = Convert.ToInt32(this.Session["userId"]);
             System.Globalization.CultureInfo customCulture = (System.Globalization.CultureInfo)System.Threading.Thread.CurrentThread.CurrentCulture.Clone();
             customCulture.NumberFormat.NumberDecimalSeparator = ".";
 
             System.Threading.Thread.CurrentThread.CurrentCulture = customCulture;
-            return View(_db.cart.ToList());
+            return View(_db.cart.Where(x => x.User_id == userid).ToList());
         }
 
         public JsonResult addToCart(int itemId, int userId)
         {
+
             System.Globalization.CultureInfo customCulture = (System.Globalization.CultureInfo)System.Threading.Thread.CurrentThread.CurrentCulture.Clone();
             customCulture.NumberFormat.NumberDecimalSeparator = ".";
 
@@ -214,9 +250,64 @@ namespace bookShopProject.Controllers
         }
         public ActionResult showOrder()
         {
+            if (Session["userId"] == null)
+            {
+                Response.Redirect("~/user/Login");
+            }
             ViewBag.length = _db.Order.ToList().Count;
+            int userid = Convert.ToInt32(this.Session["userId"]);
+            if (Convert.ToString(this.Session["role"]) == "sprzedawca")
+            {
+                ViewBag.length = _db.Order.ToList().Count;
+                return View(_db.Order.ToList());
+            }
+            ViewBag.length = _db.Order.Where(x => x.User_id == userid).ToList().Count;
+            return View(_db.Order.Where(x => x.User_id == userid).ToList());
+        }
+        public ActionResult EditOrder(int id)
+        {
+            if (Session["userId"] == null)
+            {
+                Response.Redirect("~/user/Login");
+            }
+            var order = _db.Order.Find(id);
+            return View(order);
+        }
 
-            return View(_db.Order.ToList());
+        // POST: book/Edit/5
+        [HttpPost]
+        public ActionResult EditOrder(Order order)
+        {
+            var orders = _db.Order.Where(x => x.order_number == order.order_number).ToList();
+            foreach (Order element in orders)
+            {
+                element.status = order.status;
+               _db.SaveChanges();
+              
+            }
+            return RedirectToAction("showOrder");
+        }
+        public ActionResult DeleteOrder(int id)
+        {
+            if (Session["userId"] == null)
+            {
+                Response.Redirect("~/user/Login");
+            }
+            var orderToDelete = _db.Order.Find(id);
+            return View(orderToDelete);
+        }
+
+        // POST: book/Delete/5
+        [HttpPost]
+        public ActionResult DeleteOrder(Order orderToDelete)
+        {
+            var selBook = _db.Order.Find(orderToDelete.id);
+            
+            _db.Order.RemoveRange(_db.Order.Where(c => c.order_number == selBook.order_number));
+            _db.SaveChanges();
+     
+            return RedirectToAction("showOrder");
+
         }
         public ActionResult addOrder(int userid)
         {
@@ -249,16 +340,30 @@ namespace bookShopProject.Controllers
             return RedirectToAction("showOrder");
         }
         public ActionResult showOneOrder(int userId, string orderNumber)
-        {       
-            
-            return View(_db.Order.Where(c => c.User_id == userId && c.order_number == orderNumber));
+        {
+            var user= _db.User.Where(c=> c.id==userId).FirstOrDefault();
+            ViewBag.name = user.userDetails.name + ' ' + user.userDetails.surname;
+            return View(_db.Order.Where(c => c.order_number == orderNumber));
         }
 
         [HttpPost]
         public ActionResult searchForBook(string keywords)
         {
-            return View(_db.books.Where(c => c.title.Contains(keywords)|| c.author.Contains(keywords)));
-
+            if (Session["userId"] == null)
+            {
+                Response.Redirect("~/user/Login");
+            }
+            List<Category> categoryList = _db.Category.ToList();
+            ViewBag.CategoryList = categoryList;
+            List<SelectListItem> items = new List<SelectListItem>();
+            items.Add(new SelectListItem { Text = "A-Z", Value = "AZ" });
+            items.Add(new SelectListItem { Text = "Z-A", Value = "ZA" });
+            items.Add(new SelectListItem { Text = "Cena rosnąco", Value = "cr" });
+            items.Add(new SelectListItem { Text = "Cena Malejąco", Value = "cm" });
+            ViewBag.gatunek = keywords;
+            ViewData["items"] = items;
+            var book = _db.books.Where(c => c.title.Contains(keywords) || c.author.Contains(keywords));
+            return View("Index", book);
         }
         public ActionResult changeSortingOption(string SortingValue)
         {

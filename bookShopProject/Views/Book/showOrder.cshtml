@@ -4,132 +4,189 @@
     ViewBag.Title = "showOrder";
 }
 
-<h2>showOrder</h2>
-
-<p>
-    @Html.ActionLink("Create New", "Create")
-</p>
-<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.status)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.totalAmount)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.books_id)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.books_quantity)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.User_id)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.order_number)
-        </th>
-        <th></th>
-    </tr>
-    @{string orderNumberPrev = "";
-        decimal? toPay = 0;
-        decimal? oldPay = 0;
-        int count = 1;
-        string status = "";
-        int counter = 0;
-        string oldStatus = "";
-    }
-    @foreach (var item in Model)
-    {
-
-        counter += 1;
-        toPay = item.totalAmount;
-        status = item.status;
-        if (orderNumberPrev == item.order_number)
-        {
-
-            count = count + 1;
-            oldPay += toPay;
-            status = item.status;
-        }
-
-        else
-        {
-            if (counter != 1)
-            {
-                <tr>
-                    <td>
-                        @orderNumberPrev
-                    </td>
-                    <td>
-                        @oldPay
-                    </td>
-                    <td>
-                        @oldStatus
-                    </td>
-                    <td>
-                        @Html.ActionLink("Zobacz Zamówienie", "showOneOrder", "Book", new { userId = Session["userId"], orderNumber = orderNumberPrev }, new { @class = "btn btn-block" })
-
-                    </td>
-
-                </tr>
-
-
-                oldPay = 0;
+<link href="~/Content/order.css" rel="stylesheet" />
+<div class="container mt-5">
+    <table class="table table-borderless main">
+        <thead>
+            <tr class="head">
+                <th scope="col"> NUMER ZAMÓWIENIA</th>
+                <th scope="col">DATA ZAMÓWIENIA</th>
+                <th scope="col">KLIENT</th>
+                <th scope="col">ILOŚĆ KSIĄŻEK</th>
+                <th scope="col">PODSUMOWANIE</th>
+                <th scope="col">STATUS</th>
+                <th scope="col">OPERACJA</th>
+             
+            </tr>
+        </thead>
+        <tbody>
+            @{string orderNumberPrev = "";
+                decimal? toPay = 0;
+                decimal? oldPay = 0;
+                int count = 1;
+                string status = "";
+                int counter = 0;
+                string oldStatus = "";
+                int quantity = 0;
+                int quantityOld = 0;
+                int oldId = 0;
+                int id = 0;
             }
-
+            @foreach (var item in Model)
             {
-                orderNumberPrev = item.order_number;
-                oldPay = toPay;
-                toPay = 0;
-                count = 1;
-                oldStatus = status;
 
+                counter += 1;
+                toPay = item.totalAmount;
+                id = item.id;
+                status = item.status;
+                quantity = Convert.ToInt32(item.books_quantity);
+
+                if (orderNumberPrev == item.order_number)
+                {
+                    count = count + 1;
+                    oldPay += toPay;
+                    quantityOld += quantity;
+                    status = item.status;
+                    oldId = id;
+
+                }
+
+                else
+                {
+                    if (counter != 1)
+                    {
+
+                        <tr class="rounded orderContent">
+
+                            <td class="order-color">@orderNumberPrev</td>
+                            <td>@orderNumberPrev.Substring(0, 10) @orderNumberPrev.Substring(10, 5)</td>
+                            <td class="d-flex align-items-center">
+                                <span class="ml-2">
+                                    @if (Convert.ToString(Session["role"]) == "sprzedawca")
+                                    {
+                                        @item.User_id
+                                    }
+                                    else
+                                    {
+                                        @Session["name"]
+                                    }
+                                </span>
+                            </td>
+                            <td>@quantityOld</td>
+                            <td>@Math.Round(Convert.ToDouble(@oldPay), 2) PLN</td>
+                            <td>
+                                @oldStatus
+                            </td>
+                            <td>
+                                @Html.ActionLink("Zobacz Zamówienie", "showOneOrder", "Book", new { userId = item.User_id, orderNumber = orderNumberPrev }, new { @class = "btn btn-block" })
+                                @if (Convert.ToString(Session["role"]) == "sprzedawca")
+                                {
+                                    @Html.ActionLink("Edit", "EditOrder", new { id = oldId })
+                                    <br />
+                                    @Html.ActionLink("Delete", "DeleteOrder", new { id = oldId })
+                                }
+
+                            </td>
+                        </tr>
+                        oldPay = 0;
+
+                    }
+
+                    {
+                        orderNumberPrev = item.order_number;
+                        oldPay = toPay;
+                        quantityOld = quantity;
+                        quantity = 0;
+                        toPay = 0;
+                        count = 1;
+                        oldStatus = status;
+                        oldId = id;
+
+
+
+                    }
+                }
+                if (counter == ViewBag.Length)
+                {
+                    if (orderNumberPrev == item.order_number)
+                    {
+
+                        <tr class="rounded orderContent">
+
+                            <td class="order-color">@orderNumberPrev</td>
+                            <td>@orderNumberPrev.Substring(0, 10) @orderNumberPrev.Substring(10, 5)</td>
+                            <td class="d-flex align-items-center">
+                                <span class="ml-2">
+                                    @if (Convert.ToString(Session["role"]) == "sprzedawca")
+                                    {
+                                        @item.User_id
+                                    }
+                                    else
+                                    {
+                                        @Session["name"]
+                                    }
+                                </span>
+                            </td>
+
+                            <td>@quantityOld</td>
+                            <td>@Math.Round(Convert.ToDouble(@oldPay), 2) PLN</td>
+                            <td>
+                                @oldStatus
+                            </td>
+                            <td>
+                                @Html.ActionLink("Zobacz Zamówienie", "showOneOrder", "Book", new { userId = item.User_id, orderNumber = orderNumberPrev }, new { @class = "btn btn-block" })
+
+                                @if (Convert.ToString(Session["role"]) == "sprzedawca")
+                                {
+                                    @Html.ActionLink("Edit", "EditOrder", new { id = oldId })
+                                    <br />
+                                    @Html.ActionLink("Delete", "DeleteOrder", new { id = oldId })
+                                }
+                            </td>
+                        </tr>
+                    }
+                    else
+                    {
+                        <tr class="rounded orderContent">
+
+                            <td class="order-color">@item.order_number</td>
+                            <td>@item.order_number.Substring(0, 10)  @item.order_number.Substring(10, 5))</td>
+                            <td class="d-flex align-items-center">
+                                <span class="ml-2">
+
+                                    @if (Convert.ToString(Session["role"]) == "sprzedawca")
+                                    {
+                                        @item.User_id
+                                    }
+                                    else
+                                    {
+                                        @Session["name"]
+                                    }
+                                </span>
+                            </td>
+
+
+                            <td>@item.books_quantity</td>
+                            <td>@Math.Round(Convert.ToDouble(@item.totalAmount), 2) PLN</td>
+                            <td>
+                                @item.status
+                            </td>
+                            <td>
+                                @Html.ActionLink("Zobacz Zamówienie", "showOneOrder", "Book", new { userId = item.User_id, orderNumber = @item.order_number }, new { @class = "btn btn-block" })
+
+                                @if (Convert.ToString(Session["role"]) == "sprzedawca")
+                                {
+                                    @Html.ActionLink("Edit", "EditOrder", new { id = item.id })
+                                    <br />
+                                    @Html.ActionLink("Delete", "DeleteOrder", new { id = item.id })
+                                }
+                            </td>
+                        </tr>
+                    }
+
+                }
+             
             }
-        }
-        if (counter == ViewBag.Length)
-        {
-            if (orderNumberPrev == item.order_number)
-            {
-                <tr>
-                    <td>
-
-                        @orderNumberPrev
-                    </td>
-                    <td>
-                        @oldPay
-                    </td>
-                    <td>
-                        @oldStatus
-                    </td>
-                    <td>
-                        @Html.ActionLink("Zobacz Zamówienie", "showOneOrder", "Book", new { userId = Session["userId"], orderNumber = orderNumberPrev }, new { @class = "btn btn-block" })
-
-                    </td>
-
-                </tr>
-            }
-            else
-            {
-                <tr>
-                    <td>
-
-                        @item.order_number
-                    </td>
-                    <td>
-                        @item.totalAmount
-                    </td>
-                    <td>
-                        @item.status
-                    </td>
-                    <td>
-                        @Html.ActionLink("Zobacz Zamówienie", "showOneOrder", "Book", new { userId = Session["userId"], orderNumber = @item.order_number }, new { @class = "btn btn-block" })
-                    </td>
-
-                </tr>
-            }
-        }
-
-    }
-
-</table>
+        </tbody>
+    </table>
+</div>

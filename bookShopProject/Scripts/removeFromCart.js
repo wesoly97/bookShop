@@ -15,15 +15,14 @@
                 if (data.success) {
                    
                     count = count - 1;
-                    $("#count").html(count);
+                    $("#count").html(count + " Egz.");
                     sum = sum - data.priceBook;
                     let roundedString = sum.toFixed(2);
                     sum = Number(roundedString);
-                    $("#sum").html(sum);
-                    alert(data.quantity)
+                    $("#sum").html(sum+ " PLN");
                     if (data.quantity >0)
                     {
-                        $("#quantity" + itemId).html(data.quantity);
+                        $("#quantity" + itemId).html(data.quantity +" Egz.");
                         $("#price" + itemId).html(data.price + " PLN");
                     }
                     else
@@ -33,10 +32,24 @@
                     if (count < 1)
                     {
                             $('.items').removeClass().addClass('items');
-                            $(".items").html("<h1>Twój koszyk jest pusty</h1>");
-                    }
+                        $(".items").html(`<div class="card">
+    <div class="row">
+        <div class="col-md-8 cart">
+            <div class="title">
+                <div class="row">
+                    <div class="col">
+                        <h4><b>Brak książek w koszyku</b></h4>
                    
-                       
+    <div class="back-to-shop"><a href="/book">&leftarrow;<span class="text-muted"> Powrót do sklepu</span></a></div>
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>`);
+                    }
 
                 }
             }

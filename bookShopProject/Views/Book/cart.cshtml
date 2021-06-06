@@ -1,117 +1,101 @@
 ﻿@model IEnumerable<bookShopProject.Models.cart>
-
+<link href="~/Content/layout.css" rel="stylesheet" />
 @{
     ViewBag.Title = "cart";
     int counter = 0;
     decimal sum = 0;
 }
+<br />
+<br />
+@if (Model.Count() == 0)
+{
 
-<h2>cart</h2>
-
-<p>
-    @Html.ActionLink("Create New", "Create")
-</p>
-<div class="items">
-    <table class="table">
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.books.title)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.quantity)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.books.Price)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.price)
-            </th>
-            <th>
-
-            </th>
-        </tr>
-
-        @foreach (var item in Model)
-        {
-            <tr>
-
-
-
-                <td>
-                    <div class="@("item"+item.books_id)">
-                        <img src="@Url.Content(item.books.url)" alt=@Url.Content(item.books.title) />
-                        @Html.DisplayFor(modelItem => item.books.title)
-                        @Html.DisplayFor(modelItem => item.books.author)
-                    </div>
-                </td>
-                <td>
-                    <div class="@("item"+item.books_id)">
-                        <button onclick="RemoveFromCart(this,@item.books_id,@Session["userId"])">-</button>
-                        <div id="@("quantity"+item.books_id)">
-                            @Html.DisplayFor(modelItem => item.quantity)
-                        </div>
-                        <button onclick="AddToCart(this,@item.books_id,@Session["userId"])">+</button>
+<div class="card">
+    <div class="row">
+        <div class="col-md-8 cart">
+            <div class="title">
+                <div class="row">
+                    <div class="col">
+                        <h4><b>Brak książek w koszyku</b></h4>
+                   
+    <div class="back-to-shop"><a href="/book">&leftarrow;<span class="text-muted"> Powrót do sklepu</span></a></div>
 
                     </div>
-                </td>
-                <td>
-                    <div class="@("item"+item.books_id)">
-                        @Html.DisplayFor(modelItem => item.books.Price) PLN
-                    </div>
-                </td>
-                <td>
-                    <div class="@("item"+item.books_id)">
-                        <div id="@("price"+item.books_id)">
-                            @Html.DisplayFor(modelItem => item.price) PLN
-                        </div>
-                    </div>
-                </td>
 
-                <td>
-                    <div class="@("item"+item.books_id)">
-                        @Html.ActionLink("Edit", "Edit", new { id = item.id }) |
-                        @Html.ActionLink("Details", "Details", new { id = item.id }) |
-                        @Html.ActionLink("Delete", "Delete", new { id = item.id })
-                    </div>
-                </td>
-            </tr>
-
-            counter = counter + item.quantity;
-            sum = sum + item.price;
-
-        }
-        <tr>
-            <td>
-                Razem
-            </td>
-            <td>
-                <div id="count">
-                    @counter
-                </div> egz.
-                <script type="text/javascript">
-                let count = @counter;
-                </script>
-            </td>
-            <td>
-            </td>
-            <td>
-                <div id="sum">
-                    @Math.Round(sum, 2)
                 </div>
-                <script type="text/javascript">
-                let sum = (@Math.Round(sum, 2))
-                </script>
-            </td>
-            <td>
-                <button onclick="CleanCart()">Wyczyść koszyk</button>
-            </td>
-            <td>
-                @Html.ActionLink("Submit", "addOrder", "Book", new { userId=Session["userId"] }, new { @class = "btn btn-block" })
+            </div>
+        </div>
+    </div>
+    </div>
+ }
+            else
+            {
+            <div class="items">
+                <div class="card">
+                    <div class="row">
+                        <div class="col-md-8 cart">
+                            <div class="title">
+                                <div class="row">
+                                    <div class="col">
+                                        <h4><b>Produkty w twoim koszyku!</b></h4>
+                                    </div>
 
-            </td>
-        </tr>
-    </table>
-</div>
+                                </div>
+                            </div>
+                            @foreach (var item in Model)
+                            {
+                                <div class="row border-top border-bottom @("item"+item.books_id)">
+                                    <div class="row main align-items-center">
+                                        <div class="col-md-1"><img class="img-fluid" src="@Url.Content(item.books.url)" alt=@Url.Content(item.books.title) /></div>
+                                        <div class="col-md-4">
+                                            <div class="row text-muted"> @Html.DisplayFor(modelItem => item.books.author)</div>
+                                            <div class="row">@Html.DisplayFor(modelItem => item.books.title)</div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <button href="#" onclick="RemoveFromCart(this,@item.books_id,@Session["userId"])" class="buttonInvisible" )">-</button>
+                                            <a id="@("quantity"+item.books_id)">
+                                                @Html.DisplayFor(modelItem => item.quantity)
+                                            </a><button href="#" onclick="AddToCart(this,@item.books_id,@Session["userId"])" class="buttonInvisible">+</button>
+                                        </div>
+                                        <div class="col-md-3 @("price"+item.books_id)">@Html.DisplayFor(modelItem => item.books.Price) PLN <span class="close">&#10005;</span></div>
+                                    </div>
+                                </div>
+                                counter = counter + item.quantity;
+                                sum = sum + item.price;
+                            }
+
+                            <div class="back-to-shop"><a href="/book">&leftarrow;<span class="text-muted"> Powrót do sklepu</span></a></div>
+                        </div>
+                        <div class="col-md-4 summary">
+                            <div>
+                                <h5><b>Podsumowanie</b></h5>
+                            </div>
+                            <hr>
+                            <div class="row">
+                                <div class="col-md-6" style="padding-left:0;">
+                                    <div id="count">
+                                        @counter egz.
+                                    </div>
+                                    <script type="text/javascript">
+                                        let count = @counter;
+                                    </script>
+                                </div>
+                                <div class="col-md-6 text-right">
+                                    <div id="sum">
+                                        @Math.Round(sum, 2) PLN
+                                    </div>
+                                    <script type="text/javascript">
+                                        let sum = @sum;
+                                    </script>
+                                </div>
+                            </div>
+                            @Html.ActionLink("Wyślij zamówienie", "addOrder", "Book", new { userId = Session["userId"] }, new { @class = "btn btn2" })
+                            <button onclick="CleanCart()" class="btn2">Wyczyść koszyk</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            }
 <script src="~/Scripts/addToCart.js"></script>
 <script src="~/Scripts/removeFromCart.js"></script>
 <script src="~/Scripts/cleanCart.js"></script>

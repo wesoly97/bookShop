@@ -3,78 +3,53 @@
 @{
     ViewBag.Title = "Details";
 }
+<link href="~/Content/details.css" rel="stylesheet" />
+<div class="row">
+    <div class="col-md-12 ">
+        <div class="deta d-flex justify-content-center container mt-5">
+            <div class="card p-3 details center-block text-center">
+                <div class="about-product text-center mt-3">
 
-<h2>Details</h2>
+                    <img src=@Url.Content(Model.url) width="300">
+                    <h4> @Html.DisplayFor(model => model.title)</h4>
+                    <h6 class="mt-0 text-black-50"> @Html.DisplayFor(model => model.author)</h6>
+                    <div class="row">
+                        <div class="col-md-5"><b>WYDAWCNICTWO:</b></div>
+                        <div class="col-md-3"></div>
+                        <div class="col-md-4">@Html.DisplayFor(model => model.publisher)</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-5"><b>ILOŚĆ DOSTĘPNYCH SZTUK:</b></div>
+                        <div class="col-md-3"></div>
+                        <div class="col-md-4">@Html.DisplayFor(model => model.quantity)</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-5"><b>CENA:</b></div>
+                        <div class="col-md-3"></div>
+                        <div class="col-md-4">@Html.DisplayFor(model => model.Price) PLN</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-5"><b>GATUNEK:</b></div>
+                        <div class="col-md-3"></div>
+                        <div class="col-md-4">@Html.DisplayFor(model => model.Category.Type)</div>
+                    </div>
+                    <h5> <b>Opis:</b></h5>
+                    <h6> @Html.DisplayFor(model => model.description)</h6>
 
-<div>
-    <h4>books</h4>
-    <hr />
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.author)
-        </dt>
+                </div>
+                @if (Convert.ToString(Session["role"]) == "sprzedawca")
+                {
+                    @Html.ActionLink("Edit", "Edit", new { id = Model.id }) 
+                    <br />
+                    @Html.ActionLink("Delete", "Delete", new { id = Model.id })
+                }
 
-        <dd>
-            @Html.DisplayFor(model => model.author)
-        </dd>
+                @Html.ActionLink("Powrót do sklepu", "Index", "Book", new { userId = Session["userId"] }, new { @class = "btn btn2" })
+            </div>
+        </div>
+    </div>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.title)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.title)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.description)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.description)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.publisher)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.publisher)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.quantity)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.quantity)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Price)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Price)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Category.Type)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Category.Type)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.url)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.url)
-        </dd>
-
-    </dl>
 </div>
 <p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.id }) |
-    @Html.ActionLink("Back to List", "Index")
+
 </p>

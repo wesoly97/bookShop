@@ -9,6 +9,23 @@
     <script src="~/Scripts/jquery-3.4.1.min.js"></script>
     <script src="~/Scripts/jquery.validate.min.js"></script>
     <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+    <script>
+
+        $.validator.methods.range = function (value, element, param) {
+            var globalizedValue = value.replace(",", ".");
+            return this.optional(element) || (globalizedValue >= param[0] && globalizedValue <= param[1]);
+        }
+
+        $.validator.methods.number = function (value, element) {
+            return this.optional(element) || /-?(?:\d+|\d{1,3}(?:[\s\.,]\d{3})+)(?:[\.,]\d+)?$/.test(value);
+        }
+        //Date dd/MM/yyyy
+        $.validator.methods.date = function (value, element) {
+            var date = value.split("/");
+            return this.optional(element) || !/Invalid|NaN/.test(new Date(date[2], date[1], date[0]).toString());
+        }
+    </script>
+    <link href="~/Content/footerCss.css" rel="stylesheet" />
 </head>
 <body>
     <div class="navbar navbar-inverse navbar-fixed-top">
@@ -19,14 +36,19 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                @Html.ActionLink("BookShop", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+                <a class="navbar-brand" href="/">
+                    <img src="~/logoFolder/logo.svg" />
+                </a>
+                
+
             </div>
             <div class="navbar-left" style="margin-top:12px;">
                 @using (Html.BeginForm("searchForBook", "book", FormMethod.Post))
                 {
                     <ul class="nav navbar-nav">
-                        <li><input type="text" placeholder="Search.." name="keywords"></li>
-                        <li><input type="submit" value="Search" /></li>
+                        <li><input type="text" placeholder="wprowadź frazę...." name="keywords"></li>
+                        <li>&nbsp;</li>
+                        <li><input type="submit" class="btn smallFont" value="SZUKAJ" /></li>
                     </ul>
                 }
             </div>
@@ -34,11 +56,15 @@
                 <ul class="nav navbar-nav">
                     <li>@Html.ActionLink("Ksiazki", "Index", "book")</li>
                     <li>@Html.ActionLink("Koszyk", "cart", "book")</li>
-                    <li>@Html.ActionLink("Uzytkownicy", "index", "user")</li>
+                    @if (Convert.ToString(Session["role"]) == "sprzedawca")
+                    {
+                        <li>@Html.ActionLink("Uzytkownicy", "index", "user")</li>
+                    }
+
                     <li>@Html.ActionLink("Zamowienia", "showOrder", "book")</li>
                     @if (Session["userId"] != null)
                     {
-                        <li>@Html.ActionLink("Log Out", "LogOut", "user")</li>
+                        <li>@Html.ActionLink("Wyloguj Się", "LogOut", "user")</li>
                     }
                     else
                     {
@@ -51,19 +77,109 @@
             </div>
         </div>
     </div>
-    <div class="container body-content">
+    <div class="container body-content"  id="container">
         @RenderBody()
-        <hr />
-        <footer>
-            <p>&copy; @DateTime.Now.Year - My ASP.NET Application</p>
-        </footer>
+
+
     </div>
+    <footer id="footer" class="footer-1">
+        <div class="main-footer widgets-dark typo-light">
+            <div class="container">
+                <div class="row">
+
+                    <div class="col-xs-12 col-sm-6 col-md-3">
+                        <div class="widget subscribe no-box">
+                            <h5 class="widget-title">EliteBooker<span></span></h5>
+                            <p>Internetowa księgarnia, w której zawsze znajdziesz coś ciekawego do przeczytania!</p>
+                           
+                        </div>
+                    </div>
+
+                    <div class="col-xs-12 col-sm-6 col-md-3">
+                        <div class="widget no-box">
+                            <h5 class="widget-title">Nawigacja<span></span></h5>
+                            <ul class="thumbnail-widget">
+                                <li>
+                                    <div class="thumb-content"><a href="/user/create">Rejestracja</a></div>
+                                </li>
+                                <li>
+                                    <div class="thumb-content"><a href="/user/LogIn">Logowanie</a></div>
+                                </li>
+                                <li>
+                                    <div class="thumb-content"><a href="/book">Wszystkie Książki</a></div>
+                                </li>
+                                <li>
+                                    <div class="thumb-content"><a href="/book/cart">Koszyk</a></div>
+                                </li>
+                                <li>
+                                    <div class="thumb-content"><a href="/book/showOrder">Zamówienia</a></div>
+                                </li>
+                                <li>
+                                    <div class="thumb-content"><a href="/">Strona główna</a></div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="col-xs-12 col-sm-6 col-md-3">
+                        <div class="widget no-box">
+                            <h5 class="widget-title">Get Started<span></span></h5>
+                            <p>Nie masz jeszcze konta? </p>
+                            <a class="btn" href="/user/create" target="_blank">ZAREJESTRUJ SIĘ!</a>
+                        </div>
+                    </div>
+
+                    <div class="col-xs-12 col-sm-6 col-md-3">
+
+                        <div class="widget no-box">
+                            <h5 class="widget-title">Kontakt<span></span></h5>
+                            <p>Mój Github</p>
+                            <ul class="social-footer2">
+                                <li class="">
+                                    <a title="github" target="_blank" href="https://github.com/wesoly97">
+                                        <img src="~/logoFolder/GitHub-Mark-Light-64px.png" />
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <div class="footer-copyright">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-12 text-center">
+                        <p>Mikołaj Wesołek © 2021. Wszelkie prawa zastrzeżone</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
 
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
     @RenderSection("scripts", required: false)
-<script src="~/Scripts/jquery-3.4.1.min.js"></script>
-<script src="~/Scripts/jquery.validate.min.js"></script>
-<script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+    <script src="~/Scripts/jquery-3.4.1.min.js"></script>
+    <script src="~/Scripts/jquery.validate.min.js"></script>
+    <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+    <script>
+
+        $.validator.methods.range = function (value, element, param) {
+            var globalizedValue = value.replace(",", ".");
+            return this.optional(element) || (globalizedValue >= param[0] && globalizedValue <= param[1]);
+        }
+
+        $.validator.methods.number = function (value, element) {
+            return this.optional(element) || /-?(?:\d+|\d{1,3}(?:[\s\.,]\d{3})+)(?:[\.,]\d+)?$/.test(value);
+        }
+        //Date dd/MM/yyyy
+        $.validator.methods.date = function (value, element) {
+            var date = value.split("/");
+            return this.optional(element) || !/Invalid|NaN/.test(new Date(date[2], date[1], date[0]).toString());
+        }
+    </script>
 </body>
 </html>

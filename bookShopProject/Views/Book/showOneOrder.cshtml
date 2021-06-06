@@ -2,62 +2,77 @@
 
 @{
     ViewBag.Title = "showOneOrder";
+    decimal sum = 0;
 }
+<link href="~/Content/oneOrder.css" rel="stylesheet" />
+<br /><br />
+<div class="card">
+    <header class="card-header"><strong>TWOJE ZAMÓWIENIE:</strong></header>
+    <div class="card-body">
+        <header class="card-header"><h4><strong> Numer zamówienia:</strong> @Model.First().order_number</h4></header>
+        <div class="card">
+            <div class="card-body row">
+                <div class="col-md-1"></div>
+                <div class="col-md-4"> <strong>DATA ZAKUPU:</strong><br>@Model.First().order_number.Substring(0, 10) @Model.First().order_number.Substring(10, 5)</div>
+                <div class="col-md-4"> <strong>ZAKUPIONE PRZEZ:</strong> <br> @ViewBag.name </div>
+                <div class="col-md-3"> <strong>AKTUALNY STATUS:</strong> <br> @Model.First().status </div>
+                <div class="col-md-1"></div>
+            </div>
+        </div>
+        <div class="track">
+            @if (Model.First().status == "W trakcie realizacji")
+            {
+                <div class="step active"> <span class="icon"> <i class="fa fa-check"></i> </span> <span class="text">W trakcie realizacji</span> </div>
+                <div class="step "> <span class="icon"> <i class="fa fa-check"></i> </span> <span class="text"> Oczekiwanie na kuriera</span> </div>
+                <div class="step"> <span class="icon"> <i class="fa fa-check"></i> </span><span class="text"> Odebrana od kuriera </span> </div>
+                <div class="step"> <span class="icon"> <i class="fa fa-check"></i> </span> <span class="text">Dostarczono</span> </div>
+            }
 
-<h2>showOneOrder</h2>
+            @if (Model.First().status == "Oczekiwanie na kuriera")
+            {
+                <div class="step active"> <span class="icon"> <i class="fa fa-check"></i> </span> <span class="text ">W trakcie realizacji</span> </div>
+                <div class="step active"> <span class="icon"> <i class="fa fa-check"></i> </span> <span class="text"> Oczekiwanie na kuriera</span> </div>
+                <div class="step"> <span class="icon"> <i class="fa fa-check"></i> </span><span class="text"> Odebrana od kuriera </span> </div>
+                <div class="step"> <span class="icon"> <i class="fa fa-check"></i> </span> <span class="text">Dostarczono</span> </div>
+            }
+            @if (Model.First().status == "Odebrana od kuriera")
+            {
+                <div class="step active"> <span class="icon"> <i class="fa fa-check"></i> </span> <span class="text">W trakcie realizacji</span> </div>
+                <div class="step active"> <span class="icon"> <i class="fa fa-check"></i> </span> <span class="text"> Oczekiwanie na kuriera</span> </div>
+                <div class="step active"> <span class="icon"> <i class="fa fa-check"></i> </span><span class="text"> Odebrana od kuriera </span> </div>
+                <div class="step"> <span class="icon"> <i class="fa fa-check"></i> </span> <span class="text">Dostarczono</span> </div>
+            }
+            @if (Model.First().status == "Dostarczone")
+            {
+                <div class="step active"> <span class="icon"> <i class="fa fa-check"></i> </span> <span class="text">W trakcie realizacji</span> </div>
+                <div class="step active">  <span class="icon"> <i class="fa fa-check"></i> </span><span class="text"> Oczekiwanie na kuriera</span> </div>
+                <div class="step active"> <span class="icon"> <i class="fa fa-check"></i> </span><span class="text"> Odebrana od kuriera </span> </div>
+                <div class="step active"> <span class="icon"> <i class="fa fa-check"></i> </span> <span class="text">Dostarczono</span> </div>
+            }
 
-<p>
-    @Html.ActionLink("Create New", "Create")
-</p>
-<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.books.title)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.totalAmount)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.books_id)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.books_quantity)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.User_id)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.order_number)
-        </th>
-        <th></th>
-    </tr>
+        </div>
+        <hr>
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.books.title)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.totalAmount)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.books_id)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.books_quantity)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.User_id)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.order_number)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.id }) |
-            @Html.ActionLink("Details", "Details", new { id=item.id }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.id })
-        </td>
-    </tr>
-}
+        <ul class="row">
+            @foreach (var item in Model)
+            {
+                <li class="col-md-4">
+                    <figure class="itemside mb-3">
+                        <div class="aside"><img src="@Url.Content(item.books.url)" class="img-sm border"></div>
+                        <figcaption class="info align-self-center">
+                            <p class="title"><span class="text-muted">@Html.DisplayFor(modelItem => item.books.author)</span></p>
+                            <p class="title">@Html.DisplayFor(modelItem => item.books.title) <br> Cena: @Html.DisplayFor(modelItem => item.books.Price)</p> <span class="text-muted">Ilość sztuk: @Html.DisplayFor(modelItem => item.books_quantity) </span>
+                        </figcaption>
+                    </figure>
+                </li>
+                sum = sum + (item.books.Price * Convert.ToDecimal(item.books_quantity));
+            }
+        </ul>
+        <hr>
+        <header class="card-header"><h4><strong>W SUMIE DO ZAPŁATY:</strong> @Math.Round(Convert.ToDouble(sum), 2) PLN</h4></header>
 
-</table>
+        @Html.ActionLink("Powrót do sklepu", "showOrder", "Book", new { userId = Session["userId"] }, new { @class = "btn btn2" })
+
+    </div>
+</div>
+

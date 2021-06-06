@@ -22,7 +22,9 @@ namespace bookShopProject.Controllers
         // GET: user/Details/5
         public ActionResult Details(int id)
         {
-            var userDetails = _db.userDetails.Find(id);
+            var userInfo = _db.User.Where(x => x.userDetails_id == id).FirstOrDefault();
+            var userDetails = _db.userDetails.Find(userInfo.userDetails_id);
+            ViewBag.id= userInfo.id;
             return View(userDetails);
         }
 
@@ -36,8 +38,15 @@ namespace bookShopProject.Controllers
         [HttpPost]
         public ActionResult Create(ViewModel.userViewModel obj)
         {
-           
-            userDetails ud = new userDetails();
+            var userInfo = _db.User.Where(x => x.username == obj.username).FirstOrDefault();
+            if (userInfo != null)
+            {
+                ViewBag.usernameErrorMessage = "Taki użytkownik już Istnieje,Wprowadź inny login";
+                return View("Create", obj);
+            }
+            else
+            { 
+             userDetails ud = new userDetails();
             ud.name = obj.name;
             ud.surname = obj.surname;
             ud.postCode = obj.postCode;
@@ -55,6 +64,8 @@ namespace bookShopProject.Controllers
             _db.SaveChanges();
 
             return RedirectToAction("Index");
+            }
+           
         } 
 
         // GET: user/Edit/5
@@ -96,24 +107,19 @@ namespace bookShopProject.Controllers
         [HttpPost]
         public ActionResult Delete(User userToDelete)
         {
-            try
-            {
-                // TODO: Add delete logic here
                 var deleteUser = _db.User.SingleOrDefault(m => m.id == userToDelete.id);
-                var deleteUserDetails = _db.userDetails.SingleOrDefault(m => m.id == userToDelete.userDetails_id);
-                if (!ModelState.IsValid)
-                    return RedirectToAction("Index");
+                var deleteUserDetails = _db.userDetails.SingleOrDefault(m => m.id == deleteUser.userDetails_id);
+                _db.Order.RemoveRange(_db.Order.Where(c => c.User_id == deleteUser.id));
+                _db.SaveChanges();
+                _db.cart.RemoveRange(_db.cart.Where(c => c.User_id == deleteUser.id));
+                _db.SaveChanges();
                 _db.User.Remove(deleteUser);
                 _db.SaveChanges();
                 _db.userDetails.Remove(deleteUserDetails);
                 _db.SaveChanges();
 
                 return RedirectToAction("Index");
-            }
-            catch
-            {
-                return RedirectToAction("Index");
-            }
+         
         }
         public ActionResult LogIn()
         {
@@ -132,12 +138,14 @@ namespace bookShopProject.Controllers
                 var userInfo = _db.User.Where(x => x.username == userModel.username && x.password == userModel.password).FirstOrDefault();
                 if (userInfo == null)
                 {
-                    userModel.LoginErrorMessage = "wrong username or password";
+                    userModel.LoginErrorMessage = "Nieprawidłowy login lub hasło!";
                     return View("LogIn", userModel);
                 }
                 else
                 {
                     Session["userId"] = userInfo.id;
+                    Session["role"] = userInfo.Role;
+                    Session["name"] = userInfo.userDetails.name+" "+ userInfo.userDetails.surname;
                     return RedirectToAction("Index", "Home");
                 }
               

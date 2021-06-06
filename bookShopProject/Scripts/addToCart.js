@@ -1,4 +1,8 @@
-﻿function AddToCart(item, itemId,userId)
+﻿const formatter = new Intl.NumberFormat('en-US', {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+});
+function AddToCart(item, itemId, userId)
 {
     
     let formData = new FormData();
@@ -21,11 +25,10 @@
                         $("#price" + itemId).html(data.price + " PLN");
                         if (count + 1 <= data.quantityBook) {
                             count = count + 1;
-                            $("#count").html(count);
+                            $("#count").html(count + " Egz.");
                             sum = sum + data.priceBook;
-                            let roundedString = sum.toFixed(2);
-                            sum = Number(roundedString);
-                            $("#sum").html(sum);
+                            sum = parseFloat(sum.toFixed(2))
+                            $("#sum").html(sum+" PLN");
                         }
                     }
                  

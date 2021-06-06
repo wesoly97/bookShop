@@ -3,103 +3,92 @@
 @{
     ViewBag.Title = "Create";
 }
-
-<h2>Create</h2>
-
+<link href="~/Content/login.css" rel="stylesheet" />
 @using (Html.BeginForm()) 
 {
     @Html.AntiForgeryToken()
     
-    <div class="form-horizontal">
-        <h4>userViewModel</h4>
-        <hr />
-        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-        <div class="form-group">
-            @Html.LabelFor(model => model.username, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.username, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.username, "", new { @class = "text-danger" })
-            </div>
-        </div>
+<div class="limit">
+    <div class="login-container">
+        <div class="bb-login">
+            <form class="bb-form validate-form">
+                <span class="bb-form-title p-b-26"> Zarejestruj się! </span>
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.password, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.password, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.password, "", new { @class = "text-danger" })
-            </div>
-        </div>
+                <div class="wrap-input100">
+                    @Html.ValidationMessageFor(model => model.username, "", new { @class = "text-danger" })
+                    @ViewBag.usernameErrorMessage
 
-        <div class="form-group">
-                 @{
-                var selectList = new SelectList(
-                    new List<SelectListItem>
-                    {
+                    @Html.TextBoxFor(model => model.username, new { placeholder = "LOGIN", @class = "input100" })
+
+                </div>
+                <div class="wrap-input100">
+                    @Html.ValidationMessageFor(model => model.password, "", new { @class = "text-danger" })
+
+                    @Html.PasswordFor(model => model.password, new { placeholder = "HASLO", @class = "input100" })
+                </div>
+                <div class="wrap-input100 validate-input">
+                    @Html.ValidationMessageFor(model => model.name, "", new { @class = "text-danger" })
+
+                    @Html.TextBoxFor(model => model.name, new { placeholder = "IMIE", @class = "input100" })
+                </div>
+                <div class="wrap-input100 validate-input">
+                    @Html.ValidationMessageFor(model => model.surname, "", new { @class = "text-danger" })
+
+                    @Html.TextBoxFor(model => model.surname, new { placeholder = "NAZWISKO", @class = "input100" })
+
+                </div>
+                <div class="wrap-input100 validate-input">
+                    @Html.ValidationMessageFor(model => model.postCode, "", new { @class = "text-danger" })
+                    @Html.TextBoxFor(model => model.postCode, new { placeholder = "__-___", @class = "input100" })
+
+                </div>
+                <div class="wrap-input100 validate-input">
+                    @Html.ValidationMessageFor(model => model.street, "", new { @class = "text-danger" })
+
+                    @Html.TextBoxFor(model => model.street, new { placeholder = "ULICA", @class = "input100" })
+                </div>
+                <div class="wrap-input100 validate-input">
+                    @Html.ValidationMessageFor(model => model.houseNumber, "", new { @class = "text-danger" })
+
+                    @Html.TextBoxFor(model => model.houseNumber, new { placeholder = "NUMER MIESZKANIA", @class = "input100" })
+                </div>
+                <div class="wrap-input100 validate-input">
+                    @Html.ValidationMessageFor(model => model.phoneNumber, "", new { @class = "text-danger" })
+
+                    @Html.TextBoxFor(model => model.phoneNumber, new { placeholder = "NUMER TELEFONU", @class = "input100" })
+                </div>
+
+
+                @if (Convert.ToString(Session["role"]) == "sprzedawca")
+                {
+
+                    var selectList = new SelectList(
+                        new List<SelectListItem>
+                        {
             new SelectListItem {Text = "KLIENT", Value = "klient"},
             new SelectListItem {Text = "SPRZEDAWCA", Value = "sprzedawca"},
                     }, "Value", "Text");
-            }
-            @Html.LabelFor(model => model.Role, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.DropDownListFor(m => m.Role, selectList, "Choose a role", new { @class = "css-class" })                @Html.ValidationMessageFor(model => model.Role, "", new { @class = "text-danger" })
-            </div>
-       
-        </div>
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.name, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.name, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.name, "", new { @class = "text-danger" })
+                    @Html.LabelFor(model => model.Role, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class=" validate-input">
+                @Html.DropDownListFor(m => m.Role, selectList, "Choose a role", new { @class = "css-class" })
+                @Html.ValidationMessageFor(model => model.Role, "", new { @class = "text-danger" })
             </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.surname, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.surname, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.surname, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.postCode, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.postCode, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.postCode, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.street, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.street, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.street, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.houseNumber, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.houseNumber, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.houseNumber, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.phoneNumber, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.phoneNumber, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.phoneNumber, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Create" class="btn btn-default" />
-            </div>
+                }
+                else
+                {
+                     @Html.HiddenFor(m => m.Role, new { Value = "klient" })
+                }
+                <div class="login-container-form-btn">
+                    <div class="bb-login-form-btn">
+                        <div class="bb-form-bgbtn"></div> <button class="bb-form-btn"> Utwórz konto! </button>
+                    </div>
+                </div>
+                <div class="text-center p-t-115"> <span class="txt1"> Posiadasz już konto?</span> @Html.ActionLink("ZALOGUJ SIĘ", "LogIn", "User", new { @class = "txt2" })</div>
+            </form>
         </div>
     </div>
+</div>
 }
 
 <div>
