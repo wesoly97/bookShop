@@ -41,4 +41,4 @@ Project is: _no longer continue_
 
 ## Contact
 
->Created by [Miko³aj Weso³ek](https://github.com/wesoly97)- feel free to contact me!
+>Created by [Mikolaj Wesolek](https://github.com/wesoly97)- feel free to contact me!
