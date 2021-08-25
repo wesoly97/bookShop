@@ -21,7 +21,7 @@ function AddToCart(item, itemId, userId)
                     if (!(typeof count == 'undefined'))
                     {
                         
-                        $("#quantity"+itemId).html(data.quantity);
+                        $("#quantity" + itemId).html(data.quantity + " Egz.");
                         $("#price" + itemId).html(data.price + " PLN");
                         if (count + 1 <= data.quantityBook) {
                             count = count + 1;

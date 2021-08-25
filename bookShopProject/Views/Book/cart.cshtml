@@ -54,7 +54,7 @@
                                         <div class="col-md-4">
                                             <button href="#" onclick="RemoveFromCart(this,@item.books_id,@Session["userId"])" class="buttonInvisible" )">-</button>
                                             <a id="@("quantity"+item.books_id)">
-                                                @Html.DisplayFor(modelItem => item.quantity)
+                                                @Html.DisplayFor(modelItem => item.quantity) Egz.
                                             </a><button href="#" onclick="AddToCart(this,@item.books_id,@Session["userId"])" class="buttonInvisible">+</button>
                                         </div>
                                         <div class="col-md-3 @("price"+item.books_id)">@Html.DisplayFor(modelItem => item.books.Price) PLN <span class="close">&#10005;</span></div>
@@ -74,7 +74,7 @@
                             <div class="row">
                                 <div class="col-md-6" style="padding-left:0;">
                                     <div id="count">
-                                        @counter egz.
+                                        @counter Egz.
                                     </div>
                                     <script type="text/javascript">
                                         let count = @counter;
