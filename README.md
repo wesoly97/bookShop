@@ -27,7 +27,7 @@ View of cart without books:
 View of user orders:
 ![Example screenshot](./ImagesOfEliteBooker/orders.png)
 View of order Details:
-![Example screenshot](./ImagesOfEliteBooker/ordersDetails.png)
+![Example screenshot](./ImagesOfEliteBooker/orderDetails.png)
 ## Technologies
 
 * ASP.NET MVC 5.2.7.0
@@ -41,4 +41,4 @@ Project is: _no longer continue_
 
 ## Contact
 
->Created by [Miko³aj Weso³ek](https://github.com/wesoly97)- feel free to contact me!
+>Created by [MikoÂ³aj WesoÂ³ek](https://github.com/wesoly97)- feel free to contact me!
